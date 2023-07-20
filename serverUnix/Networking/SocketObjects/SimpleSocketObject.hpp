@@ -1,10 +1,12 @@
 #ifndef SimpleSocketObject_hpp
 #define SimpleSocketObject_hpp
 
-#include <string.h>
-#include <stdlib.h>
-#include <winsock2.h>
 #include <stdio.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <netinet/in.h>
+#include <string.h>
 
 #pragma comment(lib, "wsock32.lib")
 

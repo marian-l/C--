@@ -2,14 +2,6 @@
 
 hde::SimpleSocketObject::SimpleSocketObject(int domain, int service, int protocol, int port, u_long address_space) 
 {
-    //Winsocket DLL Initialization
-    WSADATA wsaData;
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-    {
-        perror("Failed to initialize Winsock");
-        exit(EXIT_FAILURE);
-    }
-
     // Address Structure which is gonna be casted and referenced to
     address.sin_family = domain;
     address.sin_addr.s_addr = htonl(address_space);
@@ -23,8 +15,7 @@ hde::SimpleSocketObject::SimpleSocketObject(int domain, int service, int protoco
 
 hde::SimpleSocketObject::~SimpleSocketObject() {
     // Clean up resources
-    closesocket(sock);
-    WSACleanup();
+    close(sock);
 }
 
 int hde::SimpleSocketObject::establish_net_conn(int sock, struct sockaddr_in address)

@@ -4,7 +4,8 @@
 #include "TestServer.cpp"
 #include "../SocketObjects/BindingSocketObject.cpp"
 #include "../SocketObjects/SimpleSocketObject.cpp"
-#include "winsock.h"
+#include <unistd.h>
+#include <netinet/in.h>
 
 
 int main()
