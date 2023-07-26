@@ -15,7 +15,6 @@ hde::TestServer::TestServer() : SimpleServer(AF_INET, SOCK_STREAM, 0, 80, INADDR
 
 void hde::TestServer::accepter()
 {
-
     // access the member of the socket object
     struct sockaddr_in address = get_socket()->get_address();
     long long addrlen = sizeof(address);
@@ -33,7 +32,19 @@ void hde::TestServer::handler()
 
 void hde::TestServer::responder()
 {
-    char *hello = "Hello from Server";
+    // char *hello = "Hello from Server";
+    char *hello = R"( 
+        <!DOCTYPE html> <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+        </head>
+        <body>
+            <h1> Hello from Server, Young Padawan! </h1>
+        </body>
+        </html> 
+        )";
     send(new_socket, hello, strlen(hello), 0);
     close(new_socket);
 }
