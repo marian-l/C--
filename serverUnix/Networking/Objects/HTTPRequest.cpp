@@ -4,6 +4,9 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <stdio.h>
+#include <unordered_map>
+
 // Helper function to convert a string to uppercase
 std::string to_uppercase(std::string str)
 {
@@ -13,44 +16,72 @@ std::string to_uppercase(std::string str)
     return str;
 };
 
-char * process_http_method(char *method) 
+int process_http_method(char *method) 
 {
+    // UPPERCASE CONVERSION
     std::string upperMethod = to_uppercase(method);
+
+    // SEARCH METHOD, RETURN methodMap.end() on failure
     auto it = methodMap.find(upperMethod);
+
     if (it != methodMap.end()) {
         HTTPMethods httpMethod = it->second;
-        // Now you have the corresponding HTTPMethods enum value (e.g., GET, POST, etc.)
-        // Use it as needed in your code
-        std::cout << "HTTP Method: " << httpMethod << std::endl;
+        free(method);
+        return httpMethod;
     } else {
-        // Handle the case when the method string is not recognized
-        std::cout << "Invalid HTTP Method" << std::endl;
+        perror("HTTPMethod is not a legal method");
+        exit(-1);
     }
 };
 
+char * process_http_uri(char *URI)
+{
+
+};
+
+char * process_http_version(char *HTTPVersion)
+{
+    HTTPVersion = strtok(HTTPVersion, "/"); 
+
+    // In subsequent calls, the function expects a null pointer and uses the position right after the end of the last token as the new starting location for scanning.
+    HTTPVersion = strtok(NULL, "/");
+}
+
+char * process_http_headers(char *headers) 
+{
+    while (headers)
+    {
+        char *header = strtok(headers, "\n");
+        char *field = strtok(header, ": ");
+        char *value = strtok(NULL, ": ");
+
+        HTTPHeaders[field] = value;        
+    }
+}
+
 struct HTTPRequest http_request_constructor(const char *request_string)
 {
+    struct HTTPRequest request;
     char* processed_string = strdup(request_string);
-    
-    for (int i = 0; i < strlen(request_string) - 1; i++)
-    {
-        if (request_string[i] == '\n' && request_string[i + 1] == '\n')
-        {
-            processed_string[i + 1] = '|';
-        }
-    }
 
     char *token = strtok(processed_string, "\n");
     char *headers = strtok(NULL, "\n\n");
     char *body = strtok(NULL, "\n\n");
+    
+    // request line
     char *method = strtok(token, " ");
-    char *URI;
-    float HTTPVersion;
-    struct HTTPRequest request;
+    request.Method = process_http_method(method);
 
+    char *URI = strtok(NULL, " ");
+    process_http_uri(URI);
+
+    char *HTTPVersion = strtok(NULL, "\n");
+    process_http_version(HTTPVersion);
+    request.HTTPVersion = (float)atof(HTTPVersion);
+
+    // headers
+    process_http_headers(headers);
     free(processed_string);
-    process_http_method(method);
-    process_http_uri(uri);
 
 
 }
