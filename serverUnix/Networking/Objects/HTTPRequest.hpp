@@ -1,11 +1,15 @@
-#ifndef HTTPRequest_h
-#define HTTPRequest_h
+#ifndef HTTPRequest_hpp
+#define HTTPRequest_hpp
 
 #include <stdio.h>
 #include <unordered_map>
+#include <string>
+#include <string.h>
+#include <iostream>
+#include <sstream>
+#include "./../../Library/StringFunction.hpp"
 
 #endif
-
 enum HTTPMethods
 {
     GET,
@@ -19,28 +23,18 @@ enum HTTPMethods
     TRACE
 };
 
-std::unordered_map<std::string, HTTPMethods> methodMap = {
-    {"GET", GET},
-    {"POST", POST},
-    {"PUT", PUT},
-    {"HEAD", HEAD},
-    {"PATCH", PATCH},
-    {"DELETE", DELETE},
-    {"CONNECT", CONNECT},
-    {"OPTIONS", OPTIONS},
-    {"TRACE", TRACE}
-};
-
-std::unordered_map<std::string, std::string> HTTPHeaders;
-
 struct HTTPRequest 
 {
     int Method;
-    char *URI;
+    std::string URI;
     float HTTPVersion;
+    std::unordered_map<std::string, std::string> HTTPHeaders;
 };
 
+extern std::unordered_map<std::string, HTTPMethods> methodMap;
+
 struct HTTPRequest http_request_constructor(char *request_string);
+
 
 /*
 A-IM
