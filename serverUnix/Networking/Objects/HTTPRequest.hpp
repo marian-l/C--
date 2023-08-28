@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <unordered_map>
 #include <string>
-#include <string.h>
+
 #include <iostream>
 #include <sstream>
 #include "./../../Library/StringFunction.hpp"
@@ -29,6 +29,7 @@ struct HTTPRequest
     std::string URI;
     float HTTPVersion;
     std::unordered_map<std::string, std::string> HTTPHeaders;
+    std::string body;
 };
 
 extern std::unordered_map<std::string, HTTPMethods> methodMap;

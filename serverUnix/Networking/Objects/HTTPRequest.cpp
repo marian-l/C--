@@ -75,6 +75,7 @@ struct HTTPRequest http_request_constructor(char *request_string)
 
     // cut everything but body from processed_string
     body.erase(0, headers.length());
+    request.body = body;
 
     // cut request_line from headers-string
     headers.erase(0, request_line.length());
