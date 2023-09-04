@@ -35,8 +35,6 @@ void launch(struct Server *server)
     close(new_socket);
 
     }
-
-
 }
 
 int main()
