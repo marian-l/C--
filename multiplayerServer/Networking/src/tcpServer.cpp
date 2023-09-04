@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include "Networking/tcpServer.h"
-#include "Networking/tcpConnection.h"
 
 namespace Multiplayer {
     using boost::asio::ip::tcp;
@@ -31,6 +30,8 @@ namespace Multiplayer {
         // Create a connection
         auto connection = tcpConnection::Create(_ioContext);
 
+        _connections.push_back(connection);
+
         // asynchronously accept the connection
         _acceptor.async_accept(connection->socket(), [connection, this](const boost::system::error_code& error) {
             if (!error) {
@@ -38,6 +39,18 @@ namespace Multiplayer {
             }
 
             startAccept();
-        });
+
+            });
+
+    }
+
+    template<typename T>
+    void tcpServer::writeToConnection(int connectionIndex, const T &message) {
+
+    }
+
+    template<typename T>
+    void tcpServer::RegisterListenCallback(tcpServer::ListenCallback<T> callback) {
+
     }
 }

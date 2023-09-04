@@ -6,6 +6,8 @@
 #define CLIENT_SERVER_H
 
 #include <boost/asio.hpp>
+#include "Networking/tcpConnection.h"
+#include <functional>
 
 namespace Multiplayer {
     enum class IPv {
@@ -19,6 +21,16 @@ namespace Multiplayer {
         tcpServer(IPv ipv, int port);
 
         int Run();
+
+        template <typename T>
+        void writeToConnection(int connectionIndex, const T& message);
+
+        template <typename T>
+        using ListenCallback = std::function<void(int, const T&)>;
+
+        template <typename T>
+        void RegisterListenCallback(ListenCallback<T> callback);
+
     private:
         void startAccept();
     private:
@@ -27,6 +39,8 @@ namespace Multiplayer {
 
         boost::asio::io_context _ioContext;
         boost::asio::ip::tcp::acceptor _acceptor;
+
+        std::vector<tcpConnection::pointer> _connections {};
     };
 }
 
