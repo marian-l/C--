@@ -78,5 +78,6 @@
         "random": "cpp",
         "string_view": "cpp",
         "numbers": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/mnt/c/Users/maria/Dokumente/codes/C++/multiplayerServer/server"
 }
