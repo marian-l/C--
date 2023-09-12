@@ -5,7 +5,7 @@
 #include <iostream>
 #include <boost/asio/write.hpp>
 #include <boost/asio/streambuf.hpp>
-#include "Networking/tcpConnection.h"
+#include "Networking/server/tcpConnection.h"
 
 namespace Multiplayer {
     tcpConnection::tcpConnection(boost::asio::io_context &ioContext) : _socket(ioContext){

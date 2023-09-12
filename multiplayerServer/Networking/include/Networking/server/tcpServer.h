@@ -6,7 +6,7 @@
 #define CLIENT_SERVER_H
 
 #include <boost/asio.hpp>
-#include "Networking/tcpConnection.h"
+#include "tcpConnection.h"
 #include <functional>
 
 namespace Multiplayer {
@@ -22,12 +22,17 @@ namespace Multiplayer {
 
         int Run();
 
+        void broadcast(const std::string& message);
+
+        // Todo
         template <typename T>
         void writeToConnection(int connectionIndex, const T& message);
 
+        // Todo
         template <typename T>
         using ListenCallback = std::function<void(int, const T&)>;
 
+        // Todo
         template <typename T>
         void RegisterListenCallback(ListenCallback<T> callback);
 

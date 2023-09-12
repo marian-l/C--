@@ -7,8 +7,8 @@ find_package(Boost 1.77.0 REQUIRED)
 
 file(GLOB SOURCES src/* src/*/* src/*/*/*)
 add_library(${PROJECT_NAME} ${SOURCES}
-        include/Networking/tcpConnection.h
-        src/tcpConnection.cpp)
+        include/Networking/server/tcpConnection.h
+        src/server/tcpConnection.cpp)
 
 target_include_directories(${PROJECT_NAME}
         PUBLIC

@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "Networking/tcpServer.h"
+#include "Networking/server/tcpServer.h"
 
 namespace Multiplayer {
     using boost::asio::ip::tcp;
@@ -26,6 +26,10 @@ namespace Multiplayer {
         return 0;
     }
 
+    void tcpServer::broadcast(const std::string &message) {
+
+    }
+
     void tcpServer::startAccept() {
         // Create a connection
         auto connection = tcpConnection::Create(_ioContext);
@@ -44,11 +48,13 @@ namespace Multiplayer {
 
     }
 
+    // Todo
     template<typename T>
     void tcpServer::writeToConnection(int connectionIndex, const T &message) {
 
     }
 
+    // Todo
     template<typename T>
     void tcpServer::RegisterListenCallback(tcpServer::ListenCallback<T> callback) {
 
