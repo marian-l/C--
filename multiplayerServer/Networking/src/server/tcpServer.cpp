@@ -27,36 +27,45 @@ namespace Multiplayer {
     }
 
     void tcpServer::broadcast(const std::string &message) {
-
+        for (auto& connection : _connections) {
+            connection->Post(message);
+        }
     }
 
     void tcpServer::startAccept() {
-        // Create a connection
-        auto connection = tcpConnection::Create(_ioContext);
-
-        _connections.push_back(connection);
+        // emplace creates an object
+        _socket.emplace(_ioContext);
 
         // asynchronously accept the connection
-        _acceptor.async_accept(connection->socket(), [connection, this](const boost::system::error_code& error) {
+        _acceptor.async_accept(*_socket, [this](const boost::system::error_code& error)
+        {
+            // Create a connection (move creates the &&-type, which is also called right-hand value)
+            auto connection = tcpConnection::Create(std::move(*_socket));
+
+            if (onJoin) {
+                onJoin(connection);
+            }
+
+            // connections array (unordered_set)
+            _connections.insert(connection);
+
             if (!error) {
-                connection->Start();
+                connection->Start(
+                        // definition message handler
+                        [this](const std::string& message) { if (onClientMessage) onClientMessage(message); },
+                        // definition error handler
+                        [&, weak= std::weak_ptr(connection)] {
+                            // if the connection is still valid
+                            if (auto shared = weak.lock();
+                            // if we found the same connection in connections-set
+                                shared && _connections.erase(shared)) {
+                                if (onLeave) onLeave(shared);
+                            }
+                        }
+                    );
             }
 
             startAccept();
-
-            });
-
-    }
-
-    // Todo
-    template<typename T>
-    void tcpServer::writeToConnection(int connectionIndex, const T &message) {
-
-    }
-
-    // Todo
-    template<typename T>
-    void tcpServer::RegisterListenCallback(tcpServer::ListenCallback<T> callback) {
-
+        });
     }
 }

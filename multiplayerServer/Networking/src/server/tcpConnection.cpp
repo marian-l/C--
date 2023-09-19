@@ -5,36 +5,82 @@
 #include <iostream>
 #include <boost/asio/write.hpp>
 #include <boost/asio/streambuf.hpp>
+#include <boost/asio/read_until.hpp>
 #include "Networking/server/tcpConnection.h"
 
 namespace Multiplayer {
-    tcpConnection::tcpConnection(boost::asio::io_context &ioContext) : _socket(ioContext){
+    namespace io = boost::asio;
 
-}
+    tcpConnection::tcpConnection(io::ip::tcp::socket&& socket) : _socket(std::move(socket)) {
+        boost::system::error_code ec;
 
-void tcpConnection::Start() {
-        // "you can create a shared pointer within yourself pointing to yourself
-        auto strongThis = shared_from_this();
+        std::stringstream name;
+        name << _socket.remote_endpoint();
 
-        boost::asio::async_write(_socket, boost::asio::buffer(_message),
-        [strongThis](const boost::system::error_code& error, size_t bytesTransferred) {
-            if (error) {
-                std::cout << "Failed to send message!\n" << std::endl;
-            } else {
-                std::cout << "Sent " << bytesTransferred << " bytes of data \n";
-            }
-    });
+        _username = name.str();
+    }
 
-    boost::asio::streambuf buffer;
+    void tcpConnection::Start(MessageHandler&& messageHandler, ErrorHandler&& errorHandler) {
+        _messageHandler = std::move(messageHandler);
+        _errorHandler = std::move(errorHandler);
 
-    _socket.async_receive(buffer.prepare(512), [this](const boost::system::error_code& error, size_t bytesTransferred) {
-        if (error == boost::asio::error::eof) {
-            // clean connection cutoff
-            std::cout << "Client disconnected properly!" << std::endl;
-        } else if (error){
-            // throw boost::system::system_error(error);
-            std::cout << "Client disconnected improperly!" << std::endl;
+        asyncRead();
+    }
+
+    // queues messages on request (if the client sends)
+    void tcpConnection::Post(const std::string &message) {
+        bool queueIdle = _outgoingMessages.empty(); // outgoingMessages is a queue!
+        _outgoingMessages.push(message);
+
+        if(queueIdle) {
+            asyncWrite();
         }
-    });
-}
+    }
+
+    void tcpConnection::asyncRead() {
+        io::async_read_until(_socket, _streamBuffer, "\n", [self = shared_from_this()]
+                (boost::system::error_code ec, size_t bytesTransferred) {
+            self->onRead(ec, bytesTransferred);
+        });
+    }
+
+    void tcpConnection::onRead(boost::system::error_code ec, size_t bytesTransferred) {
+        if(ec) {
+            _socket.close(/*ec*/); // check for error
+
+            _errorHandler();
+            return;
+        }
+
+        std::stringstream message;
+        message << _username << ": " << std::istream(&_streamBuffer).rdbuf();
+        _streamBuffer.consume(bytesTransferred);
+        // muss nicht gecallt werden, da es von rdbuf() bereits gecallt wird. entfernt die angegebene Zahl Bytes aus dem Buffer.
+
+        _messageHandler(message.str());
+        asyncRead();
+    }
+
+    void tcpConnection::asyncWrite() {
+        // we create a buffer from front object of queue.
+        io::async_write(_socket, io::buffer(_outgoingMessages.front()), [self = shared_from_this()]
+                (boost::system::error_code ec, size_t bytesTransferred) {
+            self->onWrite(ec, bytesTransferred);
+        });
+    }
+
+    void tcpConnection::onWrite(boost::system::error_code ec, size_t bytesTransferred) {
+        if(ec) {
+            _socket.close(/*ec*/); // check for error
+
+            _errorHandler();
+            return;
+        }
+
+        _outgoingMessages.pop();
+
+        if (!_outgoingMessages.empty()) {
+            asyncWrite();
+        }
+    }
 }

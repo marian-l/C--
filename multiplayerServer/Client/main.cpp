@@ -1,35 +1,30 @@
-#include <boost/asio.hpp>
 #include <iostream>
+#include "Networking/client/tcp_client.h"
+#include <thread>
 
-using boost::asio::ip::tcp;
+using namespace Multiplayer;
 
 int main(int argc, char* argv[]) {
-    try {
-        boost::asio::io_context ioContext;
+    TCPClient client {"localhost", 1337};
 
-        tcp::resolver resolver { ioContext};
-        auto endpoints = resolver.resolve("127.0.0.1", "1337");
+    client.onMessage = [](const std::string& message) {
+        std::cout << message;
+    };
 
-        tcp::socket socket { ioContext};
-        boost::asio::connect(socket, endpoints);
+    std::thread t { [&client] () { client.Run(); }};
 
-        while(true) {
-            // Listen for messages
-            std::array<char, 128> buf;
-            boost::system::error_code error;
+    while (true) {
+        std::string message;
+        getline(std::cin, message);
 
-            size_t len = socket.read_some(boost::asio::buffer(buf), error);
+        if (message == "\\quit" || message == "\\q") break;
+        message =+ "\n"; // because getline does not give a linebreak
 
-            if (error == boost::asio::error::eof) {
-                // clean connection cutoff
-            } else if (error){
-                throw boost::system::system_error(error);
-            }
-
-            std::cout.write(buf.data(), len);
-        }
-    } catch (std::exception& e) {
-        std::cerr << e.what() << std::endl;
+        client.Post(message);
     }
+
+    client.Stop(); // causes context to stop
+    t.join(); // wait for thread to end before closing application
+
     return 0;
 }
