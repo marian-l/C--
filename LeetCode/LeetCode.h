@@ -13,6 +13,7 @@ public:
     LeetCode();
     static int RomanToInt (std::string s);
     static std::string longestCommonPrefix(std::vector<std::string>& strs);
+    static std::string _longestCommonPrefix_(std::vector<std::string>& strs);
     static std::string _longestCommonPrefix(std::vector<std::string>& strs);
 };
 
