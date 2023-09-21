@@ -3,6 +3,7 @@
 //
 
 #include "LeetCode.h"
+#include <climits>
 
 int LeetCode::RomanToInt(std::string s) {
     int result = 0;
@@ -117,40 +118,33 @@ for(int i = 0; i != shortestWordSize; i++) {
 
 // binary search
 std::string LeetCode::longestCommonPrefix(std::vector<std::string> &strs) {
-    int shortestWordSize = 128;
-    std::string shortestWord = "";
-    for(std::string word : strs) {
-        if(word.size() < shortestWordSize) {
-            shortestWordSize = word.size();
-            shortestWord = word;
-        }
+    if(strs.size() == 0) {
+        return "";
+    }
+    int minLen = INT_MAX;
+    for (std::string word : strs) {
+        minLen = std::min(minLen, static_cast<int>(word.size()));
     }
 
-    // kürzestes Wort in der Mitte teilen, linke Hälfte als Präfix zum Vergleich benutzen
-    // Wort für Wort abgleichen
-        // wenn ein Wort nicht den Präfix enthält:
-            // die Mitte um 1 verkleinern,
-            // neuen Präfix extrahieren
-            // von vorne beginnen
-        // wenn jedes Wort den Präfix enthält:
-            // Präfix speichern
-            // Mitte um 1 erhöhen
-            // Flag setzen
+    int low = 1;
+    int high = minLen;
 
-    int prefixLength = shortestWordSize / 2;
-    std::string prefix = shortestWord.substr(0, prefixLength);
-    bool _continue = true;
-    bool setContinue = false;
-
-        for (std::string word : strs) {
-            if (word.substr(0, prefixLength) != prefix) {
-                prefixLength -= 1;
-                prefix = shortestWord.substr(0, prefixLength);
-            } else {
-                prefixLength += 1;
-                prefix = shortestWord.substr(0, prefixLength);
-            }
+    while (low <= high) {
+        int middle = (low + high) / 2;
+        if (isCommonPrefix(strs, middle)) {
+            low = middle + 1;
+        } else {
+            high = middle - 1;
         }
+    }
+    return strs[0].substr(0, (low + high) / 2);
+}
 
-    return prefix;
+bool LeetCode::isCommonPrefix(std::vector<std::string> &strs, int len) {
+    std::string word = strs[0].substr(0, len);
+    for (int i = 1; i < strs.size(); i++) {
+        if(!strs[i].starts_with(word))
+            return false;
+    }
+    return true;
 }
