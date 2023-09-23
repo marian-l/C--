@@ -157,17 +157,33 @@ std::vector<std::vector<int>> LeetCode::threeSum(std::vector<int> &nums) {
     std::vector<std::vector<int>> resultVector;
     int numsSize = nums.size();
 
-    for (int i = 0; i < numsSize - 2; i++) {
-        for (int j = i+1; j < numsSize - 1; j++) {
-            for (int k = j+1; k < numsSize; k++) {
-                if(nums[i] + nums[j] + nums[k] == 0) {
-                    resultVector.push_back(std::vector<int>{nums[i], nums[j], nums[k]});
-                }
+    // only use one for loop and operate with the two-pointer technique
+    for (int i = 0; i < numsSize - 2; ++i) {
+        // filter out duplicate operations on the go
+        if (i > 0 && nums[i] == nums[i - 1])
+            continue;
+
+        //
+        int left = i + 1;
+        int right = numsSize - 1;
+
+        while (left < right) {
+            int sum = nums[i] + nums[left] + nums[right];
+
+            if (sum == 0) {
+                resultVector.push_back({nums[i], nums[left], nums[right]});
+                while (left < right && nums[left] == nums[left + 1])
+                    ++left;
+                while (left < right && nums[right] == nums[right - 1])
+                    --right;
+                ++left;
+                --right;
+            } else if (sum < 0) {
+                ++left;
+            } else {
+                --right;
             }
         }
-    }
-    for(std::vector<int> v: resultVector) {
-
     }
 
     std::sort(resultVector.begin(), resultVector.end());
