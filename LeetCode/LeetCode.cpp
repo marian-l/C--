@@ -4,6 +4,7 @@
 
 #include "LeetCode.h"
 #include <climits>
+#include <algorithm>
 
 int LeetCode::RomanToInt(std::string s) {
     int result = 0;
@@ -124,7 +125,7 @@ std::string LeetCode::longestCommonPrefix(std::vector<std::string> &strs) {
     int minLen = INT_MAX;
     for (std::string word : strs) {
         minLen = std::min(minLen, static_cast<int>(word.size()));
-    }
+    };
 
     int low = 1;
     int high = minLen;
@@ -148,3 +149,30 @@ bool LeetCode::isCommonPrefix(std::vector<std::string> &strs, int len) {
     }
     return true;
 }
+
+std::vector<std::vector<int>> LeetCode::threeSum(std::vector<int> &nums) {
+    sort(nums.begin(), nums.end());
+
+    std::vector<std::vector<int>> resultVector;
+    int numsSize = nums.size();
+
+    for (int i = 0; i < numsSize - 2; i++) {
+        for (int j = i+1; j < numsSize - 1; j++) {
+            for (int k = j+1; k < numsSize; k++) {
+                if(nums[i] + nums[j] + nums[k] == 0) {
+                    resultVector.push_back(std::vector<int>{nums[i], nums[j], nums[k]});
+                }
+            }
+        }
+    }
+    for(std::vector<int> v: resultVector) {
+
+    }
+    for (int i = 0; i < resultVector.size(); ++i) {
+        resultVector.erase( std::unique(resultVector.begin(), resultVector.end()), resultVector.end());
+    }
+
+    return resultVector;
+}
+
+
