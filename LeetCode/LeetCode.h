@@ -19,6 +19,9 @@ public:
     static bool isCommonPrefix(std::vector<std::string> &vector, int middle);
 
     std::vector<std::vector<int>> threeSum(std::vector<int>& nums);
+
+    template<typename _Predicate>
+    _Predicate isNull();
 };
 
 
