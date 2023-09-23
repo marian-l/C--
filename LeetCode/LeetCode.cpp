@@ -168,6 +168,19 @@ std::vector<std::vector<int>> LeetCode::threeSum(std::vector<int> &nums) {
         int right = numsSize - 1;
 
         while (left < right) {
+
+            // TODO: if present, include one [0,0,0] vector. currently loops over the [0, 0, 0] portion.
+            //  might try to execute on the end of the loop and in-/decrement left or right twice in return.
+
+            // if((nums[left] == 0) and (nums[right] == 0) and (nums[i] == 0)) { resultVector.push_back({nums[i], nums[left], nums[right]}); }
+            // // check for duplicates in left and right
+            // if (nums[left] == nums[left + 1]) {
+            //     ++left;
+            // } else if (nums[right] == nums[right - 1]) {
+            //     --right;
+            // }
+
+
             int sum = nums[i] + nums[left] + nums[right];
 
             if (sum == 0) {
@@ -186,8 +199,10 @@ std::vector<std::vector<int>> LeetCode::threeSum(std::vector<int> &nums) {
         }
     }
 
-    std::sort(resultVector.begin(), resultVector.end());
-    resultVector.erase( std::unique(resultVector.begin(), resultVector.end()), resultVector.end());
+    // delete [0,0,0] elements (wont be needed because we actually dont include the 0,0,0 element.)
+    // resultVector.erase(std::remove_if(resultVector.begin(), resultVector.end(), [](const std::vector<int>& vec) {
+    //     return (vec == std::vector<int>{0,0,0});
+    // }), resultVector.end());
 
     return resultVector;
 }
