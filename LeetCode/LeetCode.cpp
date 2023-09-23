@@ -5,6 +5,7 @@
 #include "LeetCode.h"
 #include <climits>
 #include <algorithm>
+#include <list>
 
 int LeetCode::RomanToInt(std::string s) {
     int result = 0;
@@ -168,9 +169,9 @@ std::vector<std::vector<int>> LeetCode::threeSum(std::vector<int> &nums) {
     for(std::vector<int> v: resultVector) {
 
     }
-    for (int i = 0; i < resultVector.size(); ++i) {
-        resultVector.erase( std::unique(resultVector.begin(), resultVector.end()), resultVector.end());
-    }
+
+    std::sort(resultVector.begin(), resultVector.end());
+    resultVector.erase( std::unique(resultVector.begin(), resultVector.end()), resultVector.end());
 
     return resultVector;
 }
