@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <cmath>
 
 class LeetCode {
 public:
@@ -20,8 +21,7 @@ public:
 
     std::vector<std::vector<int>> threeSum(std::vector<int>& nums);
 
-    template<typename _Predicate>
-    _Predicate isNull();
+    int ClosestThreeSum(std::vector<int> &nums, int target);
 };
 
 

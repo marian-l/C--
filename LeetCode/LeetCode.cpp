@@ -6,6 +6,7 @@
 #include <climits>
 #include <algorithm>
 #include <list>
+#include <iostream>
 
 int LeetCode::RomanToInt(std::string s) {
     int result = 0;
@@ -168,19 +169,6 @@ std::vector<std::vector<int>> LeetCode::threeSum(std::vector<int> &nums) {
         int right = numsSize - 1;
 
         while (left < right) {
-
-            // TODO: if present, include one [0,0,0] vector. currently loops over the [0, 0, 0] portion.
-            //  might try to execute on the end of the loop and in-/decrement left or right twice in return.
-
-            // if((nums[left] == 0) and (nums[right] == 0) and (nums[i] == 0)) { resultVector.push_back({nums[i], nums[left], nums[right]}); }
-            // // check for duplicates in left and right
-            // if (nums[left] == nums[left + 1]) {
-            //     ++left;
-            // } else if (nums[right] == nums[right - 1]) {
-            //     --right;
-            // }
-
-
             int sum = nums[i] + nums[left] + nums[right];
 
             if (sum == 0) {
@@ -199,12 +187,47 @@ std::vector<std::vector<int>> LeetCode::threeSum(std::vector<int> &nums) {
         }
     }
 
-    // delete [0,0,0] elements (wont be needed because we actually dont include the 0,0,0 element.)
-    // resultVector.erase(std::remove_if(resultVector.begin(), resultVector.end(), [](const std::vector<int>& vec) {
-    //     return (vec == std::vector<int>{0,0,0});
-    // }), resultVector.end());
-
     return resultVector;
 }
 
+int LeetCode::ClosestThreeSum(std::vector<int>& nums, int target) {
+    sort(nums.begin(), nums.end());
+
+    if (nums.size() < 3) {
+        return 0;
+    } else if (nums.size() == 3) {
+        return (nums[0] + nums[1] + nums[2]);
+    }
+
+    int result;
+    int prevDistance = INT_MAX;
+
+    for (int i = 0; i < nums.size() - 2; i++) {
+        int left = i + 1;
+        int right = nums.size() - 1;
+
+        while(left < right) {
+            int sum = nums[i]+ nums[left] + nums[right];
+
+
+            if(sum == target) {
+                return sum;
+            }
+
+            if (result < target) {
+                left++;
+            } else {
+                right--;
+            }
+
+            int distance = abs(sum - target);
+
+            if(distance < prevDistance) {
+                result = sum;
+                prevDistance = distance;
+            }
+        }
+    }
+    return result;
+}
 
