@@ -6,10 +6,8 @@
 
 int main() {
     LeetCode leetCode = LeetCode();
+    std::string digits = "23";
+    leetCode.CartesianProduct(digits);
 
-    std::vector nums = {4,0,5,-5,3,3,0,-4,-5};
-
-    std::cout << leetCode.ClosestThreeSum(nums, -2);
-
-    return 0;
+        return 0;
 }

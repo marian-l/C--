@@ -6,7 +6,6 @@
 #include <climits>
 #include <algorithm>
 #include <list>
-#include <iostream>
 
 int LeetCode::RomanToInt(std::string s) {
     int result = 0;
@@ -146,7 +145,7 @@ std::string LeetCode::longestCommonPrefix(std::vector<std::string> &strs) {
 bool LeetCode::isCommonPrefix(std::vector<std::string> &strs, int len) {
     std::string word = strs[0].substr(0, len);
     for (int i = 1; i < strs.size(); i++) {
-        if(!strs[i].starts_with(word))
+//        if(!strs[i].starts_with(word))
             return false;
     }
     return true;
@@ -169,6 +168,18 @@ std::vector<std::vector<int>> LeetCode::threeSum(std::vector<int> &nums) {
         int right = numsSize - 1;
 
         while (left < right) {
+
+            // TODO: if present, include one [0,0,0] vector. currently loops over the [0, 0, 0] portion.
+            //  might try to execute on the end of the loop and in-/decrement left or right twice in return.
+
+            // if((nums[left] == 0) and (nums[right] == 0) and (nums[i] == 0)) { resultVector.push_back({nums[i], nums[left], nums[right]}); }
+            // // check for duplicates in left and right
+            // if (nums[left] == nums[left + 1]) {
+            //     ++left;
+            // } else if (nums[right] == nums[right - 1]) {
+            //     --right;
+            // }
+
             int sum = nums[i] + nums[left] + nums[right];
 
             if (sum == 0) {
@@ -187,47 +198,44 @@ std::vector<std::vector<int>> LeetCode::threeSum(std::vector<int> &nums) {
         }
     }
 
+    // delete [0,0,0] elements (wont be needed because we actually dont include the 0,0,0 element.)
+    // resultVector.erase(std::remove_if(resultVector.begin(), resultVector.end(), [](const std::vector<int>& vec) {
+    //     return (vec == std::vector<int>{0,0,0});
+    // }), resultVector.end());
+
     return resultVector;
 }
 
-int LeetCode::ClosestThreeSum(std::vector<int>& nums, int target) {
-    sort(nums.begin(), nums.end());
-
-    if (nums.size() < 3) {
-        return 0;
-    } else if (nums.size() == 3) {
-        return (nums[0] + nums[1] + nums[2]);
+std::vector<std::string> LeetCode::CartesianProduct(std::string digits) {
+    // TODO: correct current structures to make usage of the recursion in one more layer if possible
+    std::vector<int> convertedDigits; 
+    for (char c: digits) {
+        int d = c - '0';
+        convertedDigits.push_back(d);
     }
 
-    int result;
-    int prevDistance = INT_MAX;
+    std::vector<std::string> cartesianProduct;
+    std::vector<std::string> buttonLetters = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
 
-    for (int i = 0; i < nums.size() - 2; i++) {
-        int left = i + 1;
-        int right = nums.size() - 1;
+    while(convertedDigits.size() != 0) { // vector
+        std::string letters = buttonLetters[convertedDigits.size()-1];
+        std::vector<char> vectorLetters(letters.begin(), letters.end());
 
-        while(left < right) {
-            int sum = nums[i]+ nums[left] + nums[right];
-
-
-            if(sum == target) {
-                return sum;
-            }
-
-            if (result < target) {
-                left++;
-            } else {
-                right--;
-            }
-
-            int distance = abs(sum - target);
-
-            if(distance < prevDistance) {
-                result = sum;
-                prevDistance = distance;
-            }
-        }
+        cartesianProduct = recursiveCartesian(vectorLetters, cartesianProduct);
+        convertedDigits.pop_back();
     }
-    return result;
+
+    return cartesianProduct;
 }
 
+std::vector<std::string> recursiveCartesian(std::vector<char> vTmp, std::vector<std::string> vRst) {
+    std::vector<std::string> result;
+        while(vTmp.size() != 0) {
+            int vTmpIndex = vTmp.size()-1;
+            for(std::string string: vRst) {
+                string.push_back(vTmp[vTmpIndex]);
+            }
+            vTmp.pop_back();
+        }
+        return vRst; // better not use a pointer because that would mean the value should not be changed but rather used as a singleton?
+    }

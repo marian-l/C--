@@ -7,7 +7,6 @@
 
 #include <vector>
 #include <string>
-#include <cmath>
 
 class LeetCode {
 public:
@@ -20,8 +19,9 @@ public:
     static bool isCommonPrefix(std::vector<std::string> &vector, int middle);
 
     std::vector<std::vector<int>> threeSum(std::vector<int>& nums);
-
-    int ClosestThreeSum(std::vector<int> &nums, int target);
+    
+    std::vector<std::string> LeetCode::CartesianProduct(std::string digits);
+    std::vector<std::string> recursiveCartesian(std::vector<char> vTmp, std::vector<std::string> vRst);
 };
 
 
