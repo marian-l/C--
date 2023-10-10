@@ -19,9 +19,9 @@ public:
     static bool isCommonPrefix(std::vector<std::string> &vector, int middle);
 
     std::vector<std::vector<int>> threeSum(std::vector<int>& nums);
-    
-    std::vector<std::string> LeetCode::CartesianProduct(std::string digits);
-    std::vector<std::string> recursiveCartesian(std::vector<char> vTmp, std::vector<std::string> vRst);
+
+    std::vector<std::string> CartesianProduct(std::string digits);
+    std::vector<std::string> _CartesianProduct(std::string digits);
 };
 
 

@@ -145,7 +145,7 @@ std::string LeetCode::longestCommonPrefix(std::vector<std::string> &strs) {
 bool LeetCode::isCommonPrefix(std::vector<std::string> &strs, int len) {
     std::string word = strs[0].substr(0, len);
     for (int i = 1; i < strs.size(); i++) {
-//        if(!strs[i].starts_with(word))
+        if(!strs[i].starts_with(word))
             return false;
     }
     return true;
@@ -206,36 +206,54 @@ std::vector<std::vector<int>> LeetCode::threeSum(std::vector<int> &nums) {
     return resultVector;
 }
 
+std::vector<std::string> LeetCode::_CartesianProduct(std::string digits) {
+// basecase: empty list, only one digit
+    std::vector<std::string> cartesianProduct = {""};
+
+    if (digits.empty()) {
+        return {}; // Clang-Tidy: Avoid repeating the return type from the declaration; use a braced initializer list instead
+    }
+
+    std::vector<std::string> buttonLetters = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+
+    for(char c: digits) {
+        std::vector<std::string> tempProduct;
+        for (char d: buttonLetters[c - '0']) {
+            for (auto s: cartesianProduct) {
+                tempProduct.push_back(s + d);
+            }
+        }
+        cartesianProduct.swap(tempProduct);
+    }
+    return cartesianProduct;
+}
+
 std::vector<std::string> LeetCode::CartesianProduct(std::string digits) {
-    // TODO: correct current structures to make usage of the recursion in one more layer if possible
-    std::vector<int> convertedDigits; 
+    std::vector<int> convertedDigits;
     for (char c: digits) {
         int d = c - '0';
         convertedDigits.push_back(d);
     }
 
-    std::vector<std::string> cartesianProduct;
+    std::vector<std::string> cartesianProduct = {""};
     std::vector<std::string> buttonLetters = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
 
-    while(convertedDigits.size() != 0) { // vector
-        std::string letters = buttonLetters[convertedDigits.size()-1];
+    for(auto c: convertedDigits) {
+        std::string letters = buttonLetters[c];
         std::vector<char> vectorLetters(letters.begin(), letters.end());
 
-        cartesianProduct = recursiveCartesian(vectorLetters, cartesianProduct);
-        convertedDigits.pop_back();
+        std::vector<std::string> tempVector;
+
+        for(auto vc: vectorLetters) {
+            for(auto string: cartesianProduct) {
+                tempVector.push_back(string + vc);
+            }
+        }
+        cartesianProduct.swap(tempVector);
+
     }
 
     return cartesianProduct;
 }
 
-std::vector<std::string> recursiveCartesian(std::vector<char> vTmp, std::vector<std::string> vRst) {
-    std::vector<std::string> result;
-        while(vTmp.size() != 0) {
-            int vTmpIndex = vTmp.size()-1;
-            for(std::string string: vRst) {
-                string.push_back(vTmp[vTmpIndex]);
-            }
-            vTmp.pop_back();
-        }
-        return vRst; // better not use a pointer because that would mean the value should not be changed but rather used as a singleton?
-    }
+
