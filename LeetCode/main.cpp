@@ -6,12 +6,11 @@
 
 int main() {
     LeetCode leetCode = LeetCode();
-    std::string digits = "23";
-    std::vector<std::string> v1 = leetCode.CartesianProduct(digits);
 
-    for(std::string s: v1) {
-        std::cout << s << "; ";
-    }
+    std::vector<int> nums = {5,1,2,3,4};
+    int result = leetCode.search(nums, 1);
+
+    std::cout << result;
 
         return 0;
 }

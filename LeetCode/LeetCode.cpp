@@ -206,7 +206,7 @@ std::vector<std::vector<int>> LeetCode::threeSum(std::vector<int> &nums) {
     return resultVector;
 }
 
-std::vector<std::string> LeetCode::_CartesianProduct(std::string digits) {
+std::vector<std::string> LeetCode::CartesianProduct(std::string digits) {
 // basecase: empty list, only one digit
     std::vector<std::string> cartesianProduct = {""};
 
@@ -228,32 +228,143 @@ std::vector<std::string> LeetCode::_CartesianProduct(std::string digits) {
     return cartesianProduct;
 }
 
-std::vector<std::string> LeetCode::CartesianProduct(std::string digits) {
-    std::vector<int> convertedDigits;
-    for (char c: digits) {
-        int d = c - '0';
-        convertedDigits.push_back(d);
+int LeetCode::search(std::vector<int>& nums, int target) {
+    // pivot point is the index of the largest number or the index of the lowest number - 1
+    // from start to pivot point the value of numbers is ascending
+    // from pivot-point+1 to n-1 the value of numbers is also ascending
+
+    int index = 0;
+
+    if(nums.empty()) {
+        return -1;
+    } else if(nums.size() <= 3) {
+        for (int i: nums) {
+            if(i == target) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
     }
 
-    std::vector<std::string> cartesianProduct = {""};
-    std::vector<std::string> buttonLetters = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    int right = nums.size() - 1; int left = 0; int middle = (right + left) / 2;
 
-    for(auto c: convertedDigits) {
-        std::string letters = buttonLetters[c];
-        std::vector<char> vectorLetters(letters.begin(), letters.end());
+    // array is still sorted
+    if(nums[left] < nums[middle] && nums[middle] < nums[right]) {
+        // binary search for target
+        while(left <= right) {
 
-        std::vector<std::string> tempVector;
+            if(target == nums[middle]) {
+                return middle;
+            }
 
-        for(auto vc: vectorLetters) {
-            for(auto string: cartesianProduct) {
-                tempVector.push_back(string + vc);
+            if(target < nums[middle]) {
+                right = middle - 1;
+            } else {
+                left = middle + 1;
+            }
+            middle = (right + left) / 2;
+        }
+    // finding the pivot point in rotated array
+    } else {
+        // binary search pivot element
+        while(left <= right) {
+
+            // the pivot is in the middle
+            if(nums[middle] > nums[middle + 1]) {
+                index = middle;
+                break;
+
+                // the pivot is one left of the middle
+            }
+            // else if(nums[middle - 1] > nums[middle]) {
+            //     index = middle - 1;
+            //     break;
+            // }
+
+            if(nums[left] > nums[middle]) {
+                // pivot point is to the left
+                right = middle - 1;
+            } else {
+                // pivot point is to the right
+                left = middle + 1;
+            }
+
+            middle = (right + left) / 2;
+        }
+
+        // now perform binary search on one of the subarrays
+        if(target >= nums[0]) {
+            // refresh the binary search parameters
+            right = index; left = 0; middle = (right + left) / 2;
+
+            // binary search on the left array because the left array contains the bigger numbers
+            while(left <= right) {
+                if(target == nums[middle]) {
+                    return middle;
+                }
+
+                if(target < nums[middle]) {
+                    right = middle - 1;
+                } else {
+                    left = middle + 1;
+                }
+                middle = (right + left) / 2;
+            }
+        } else {
+            // refresh the binary search parameters
+            right = nums.size() - 1; left = index+1; middle = (right + left) / 2;
+
+            // binary search on the right array because the right array contains the smaller numbers
+            while(left <= right) {
+                if(target == nums[middle]) {
+                    return middle;
+                }
+
+                if(target < nums[middle]) {
+                    right = middle - 1;
+                } else {
+                    left = middle + 1;
+                }
+                middle = (right + left) / 2;
             }
         }
-        cartesianProduct.swap(tempVector);
-
     }
 
-    return cartesianProduct;
+    // in case the value is not found
+    return -1;
 }
+
+/*
+ * Programm nutzt Binärsuche, um bei einem sortierten Array das Target zu finden, solange das Array größer als 3 Elemente ist (seltsame BugCases).
+ * Die Binärsuche geht so: Die linke Grenze liegt am Anfang, die rechte Grenze am Ende des Arrays. Die Mitte wird gebildet.
+ * Es muss geprüft werden, ob die Mitte das Element ist, das gesucht wird und gegebenenfalls dieses Element zurückgegeben werden.
+ * Wenn das Element nicht in der Mitte liegt, können wir überprüfen, ob das Element in der Mitte größer oder kleiner als das Target ist und dementsprechend in einem
+ * sortierten Array die linke oder rechte Hälfte durchsuchen. Die linke bzw rechte Grenze wird dann angepasst auf Mitte+-1, da wir die Mitte ja bereits geprüft haben.
+ * Die Mitte wird neu berechnet. Dann wird das ganze wiederholt.
+ *
+ * Haben wir den Fall, dass das Array rotiert worden ist, suchen wir zuerst das Pivotelement, also das Element, dessen Nachfolger kleiner ist als es selbst
+ * (das Array wurde ja vorher sortiert). Das Pivotelement ist entweder in der Mitte, oder eben nicht, das zeigen die Testcases. Mit dem Pivotelement können wir jetzt
+ * beurteilen, welches der beiden Subarrays wir durchsuchen. Wir überprüfen, ob das linke Element des ganzen Arrays kleiner-gleich dem Target ist, was ja bedeuten
+ * würde, dass die kleineren Zahlen des rechten Subarrays alle zu klein wären.
+ *
+ * Die Edge Cases habe ich lazy abgedeckt, wenn dass Array klein ist, dann kann man es auch händisch durchsuchen. Leere Arrays und welche,
+ * die das Element nicht enthalten, sind auch abgedeckt.
+ *
+ * left < middle && middle < right
+ * [0,1,2,4,5,6,7]
+ *
+ * left < middle && right < middle
+ * [1,2,4,5,6,7,0]
+ * [2,4,5,6,7,0,1]
+ * [4,5,6,7,0,1,2]
+ *
+ * left > middle && right > middle
+ * [5,6,7,0,1,2,4]
+ * [6,7,0,1,2,4,5]
+ * [7,0,1,2,4,5,6]
+ *
+ * */
+
 
 
