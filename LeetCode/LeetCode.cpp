@@ -333,7 +333,6 @@ int LeetCode::search(std::vector<int>& nums, int target) {
 
     // in case the value is not found
     return -1;
-}
 
 /*
  * Programm nutzt Binärsuche, um bei einem sortierten Array das Target zu finden, solange das Array größer als 3 Elemente ist (seltsame BugCases).
@@ -365,6 +364,297 @@ int LeetCode::search(std::vector<int>& nums, int target) {
  * [7,0,1,2,4,5,6]
  *
  * */
+}
+
+bool LeetCode::searchWithDuplicates(std::vector<int> &nums, int target) {
+    int index = 0;
+
+    if(nums.empty()) {
+        return false;
+    } else if(nums.size() <= 3) {
+        for (int i: nums) {
+            if(i == target) {
+                return true;
+            }
+            index++;
+        }
+        return false;
+    }
+
+    int right = nums.size() - 1; int left = 0; int middle = (right + left) / 2;
+
+    // array is still sorted
+    if(nums[left] < nums[middle] && nums[middle] < nums[right]) {
+        // binary search for target
+        while(left <= right) {
+
+            if(target == nums[middle]) {
+                return true;
+            }
+
+            if(target < nums[middle]) {
+                right = middle - 1;
+            } else {
+                left = middle + 1;
+            }
+            middle = (right + left) / 2;
+        }
+        // finding the pivot point in rotated array
+    } else {
+        // binary search pivot element
+        while(left <= right) {
+
+            // the pivot is in the middle
+            if(nums[middle] > nums[middle + 1]) {
+                index = middle;
+                break;
+
+                // the pivot is one left of the middle
+            }
+            // else if(nums[middle - 1] > nums[middle]) {
+            //     index = middle - 1;
+            //     break;
+            // }
+
+            if(nums[left] > nums[middle]) {
+                // pivot point is to the left
+                right = middle - 1;
+            } else {
+                // pivot point is to the right
+                left = middle + 1;
+            }
+
+            middle = (right + left) / 2;
+        }
+
+        // now perform binary search on one of the subarrays
+        if(target >= nums[0]) {
+            // refresh the binary search parameters
+            right = index; left = 0; middle = (right + left) / 2;
+
+            // binary search on the left array because the left array contains the bigger numbers
+            while(left <= right) {
+                if(target == nums[middle]) {
+                    return true;
+                }
+
+                if(target < nums[middle]) {
+                    right = middle - 1;
+                } else {
+                    left = middle + 1;
+                }
+                middle = (right + left) / 2;
+            }
+        } else {
+            // refresh the binary search parameters
+            right = nums.size() - 1; left = index+1; middle = (right + left) / 2;
+
+            // binary search on the right array because the right array contains the smaller numbers
+            while(left <= right) {
+                if(target == nums[middle]) {
+                    return true;
+                }
+
+                if(target < nums[middle]) {
+                    right = middle - 1;
+                } else {
+                    left = middle + 1;
+                }
+                middle = (right + left) / 2;
+            }
+        }
+    }
+
+    // in case the value is not found
+    return false;
+}
+
+std::vector<int> LeetCode::searchRange(std::vector<int> &nums, int target) {
+    // if middle element is smaller than target or target, go left to find either the beginning of target or the left ending of target to set left equal to.
+    std::vector<int> solution = {-1, -1};
+
+
+    if(nums.empty()) {
+        return solution;
+    } else if(nums.size() == 1) {
+        for (int i = 0; i < 2; ++i) {
+            solution[i] = (nums[0] == target) ? 0 : -1;
+        }
+        return solution;
+    } else if(nums.size() == 2) {
+        solution[0] = (nums[0] == target) ? 0 : -1;
+        solution[1] = (nums[1] == target) ? 1 : solution[0];
+        solution[0] = ((solution[0] != -1) && (solution[1] != -1)) ? solution[0] : solution[1];
+
+        return solution;
+    }
+
+    // left
+    int left = 0; int right = nums.size(); int middle = (left + right) / 2;
+
+    while(left <= right) {
+        if(nums[middle] == target) {
+            solution[0] = middle;
+        }
+
+        if (nums[middle] < target) {
+            left = middle + 1;
+        } else {
+            right = middle - 1;
+        }
+
+        middle = (left + right) / 2;
+    }
+
+    // right
+    left = 0; right = nums.size() - 1; middle = (left + right) / 2;
+
+    while(left <= right) {
+        if(nums[middle] == target) {
+                solution[1] = middle;
+        }
+
+        if (nums[middle] > target) {
+            right = middle - 1;
+        } else {
+            left = middle + 1;
+        }
+
+        middle = (left + right) / 2;
+    }
+
+
+    return solution;
+}
+
+int LeetCode::searchInsert(std::vector<int> &nums, int target) {
+    int left = 0; int right = nums.size() - 1; int middle = (left + right) / 2;
+    int index = -1;
+
+    // search for target
+    while(left <= right) {
+        if(nums[middle] == target) {
+            index = middle;
+            break;
+        }
+
+        if(nums[middle] > target) {
+            right = middle - 1;
+        } else {
+            left = middle + 1;
+        }
+
+        middle = (left + right) / 2;
+    }
+
+    // return index of target in success
+    if(index != -1) {
+        return index;
+
+    // search for the "would be" index of the element in the sorted array
+    } else {
+
+        // target is bigger than the biggest element
+        if(target > nums.back()) {
+            return nums.size();
+
+        // target is smaller than the smallest element
+        } else if (target < nums[0]) {
+            return 0;
+
+        // target is inside the array
+        } else {
+            // search "would be" position of target
+            int left = 0; int right = nums.size() - 1; int middle = (left + right) / 2;
+
+            while(left <= right) {
+                if((nums[middle] < target) && target < (nums[middle+1])) {
+                    return middle + 1;
+                } else if ((nums[middle] > target) && target > (nums[middle-1])) {
+                    return middle;
+                }
+
+                if(nums[middle] < target) {
+                    left = middle + 1;
+                } else {
+                    right = middle - 1;
+                }
+
+                middle = (left + right) / 2;
+            }
+        }
+    }
+    return -1;
+}
+
+int LeetCode::mySqrt(int x) {
+    long left = 0; long right = x; long middle = left + (left - right) / 2;
+
+    while (left <= right) {
+        // unsign middle
+        middle = (middle < 0) ? middle*-1 : middle;
+
+        if(((middle * middle < x) && ((middle+1)*(middle+1) > x)) || (middle * middle == x)) {
+            return middle;
+        }
+
+        if(middle * middle < x) {
+            left = middle + 1;
+        } else {
+            right = middle - 1;
+        }
+
+        middle = (left + right) / 2;
+    }
+
+    return -1;
+}
+
+// my solution is not really competitively good on leetcode, scoring only 10% in both categories
+bool LeetCode::searchMatrix(std::vector<std::vector<int>> &matrix, int target) {
+    // outer binary
+
+    int left = 0; int right = matrix.size() - 1; int middle = (left + right) / 2;
+    int index = -1;
+
+    while(left <= right) {
+        // we immediately found the right one!
+        if((matrix[middle][0] <= target) && (matrix[middle][matrix[middle].size()-1] >= target)) {
+            index = middle;
+        }
+
+        // wenn das erste Element schon zu groß ist, dann können wir links weiter suchen
+        if(matrix[middle][0] > target) {
+            right = middle - 1;
+        } else {
+            left = middle + 1;
+        }
+
+        middle = (left + right) / 2;
+    }
+
+    if (index == -1) {
+        return false;
+    }
+
+    left = 0; right = matrix[index].size() - 1; middle = (left + right) / 2;
+
+    while(left <= right) {
+        if(matrix[index][middle] == target) {
+            return true;
+        }
+
+        if(matrix[index][middle] < target) {
+            left = middle + 1;
+        } else {
+            right = middle - 1;
+        }
+
+        middle = (left + right) / 2;
+    }
+
+    return false;
+}
 
 
 
