@@ -25,13 +25,9 @@ public:
         }
 
         if (item > root->data) {
-            // shift the smaller value to the left
-            root->left = insert(root->left, root->data);
-            root->data = item;
+            root->right = insert(root->right, item);
         } else if (item < root->data) {
-            root->right = insert(root->right, root->data);
-            root->data = item;
-            // instead, call insert with the current node and the former item of it and after the insertion replace it with the new value.
+            root->left = insert(root->left, item);
         } else {
             root->left = insert(root->left, item);
         }
@@ -39,9 +35,7 @@ public:
         return new_node;
     }
 
-    void remove(int item) {
-
-    }
+    void remove(int item);
 
     Node* search(Node* start, int item, int mode) {
         // TFS:
