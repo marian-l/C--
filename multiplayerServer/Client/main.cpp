@@ -7,6 +7,7 @@ using namespace Multiplayer;
 int main(int argc, char* argv[]) {
     TCPClient client {"localhost", 1337};
 
+    // Lambda, parameter message wird ausgegeben.
     client.onMessage = [](const std::string& message) {
         std::cout << message;
     };
