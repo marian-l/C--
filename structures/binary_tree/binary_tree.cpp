@@ -35,6 +35,29 @@ public:
         return new_node;
     }
 
+    // bubbles up
+    Node* insert_at_root(Node* root, int item) {
+        Node* new_node;
+        if (root == NULL) {
+            new_node = new Node(item);
+            return new_node;
+        }
+
+        if (item > root->data) {
+            // shift the smaller value to the left
+            root->left = insert_at_root(root->left, root->data);
+            root->data = item;
+        } else if (item < root->data) {
+            root->right = insert_at_root(root->right, root->data);
+            root->data = item;
+            // instead, call insert with the current node and the former item of it and after the insertion replace it with the new value.
+        } else {
+            root->left = insert_at_root(root->left, item);
+        }
+
+        return new_node;
+    }
+
     void remove(int item);
 
     Node* search(Node* start, int item, int mode) {
