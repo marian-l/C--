@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/Server.dir/main.cpp.o -o Server  -lNetworking 

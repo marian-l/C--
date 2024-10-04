@@ -1,5 +1,15 @@
 gitty
 gitty.pub
 *.o
-serverUnix/DataStructures/HashMap/
+src/serverUnix/DataStructures/HashMap/
 
+/src/structures/binary_tree/cmake-build-debug/
+/src/others/Boost_Asio_Tutorial/cmake-build-debug/
+/src/multiplayerServer/cmake-build-debug/
+/src/LeetCode/cmake-build-debug/
+*.cmake
+*.txt
+*.c
+*.yaml
+*.bin
+*.json
