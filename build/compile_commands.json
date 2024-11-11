@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/mnt/c/Users/maria/Dokumente/codes/C++/build",
-  "command": "/usr/bin/g++  -I/mnt/c/Users/maria/Dokumente/codes/C++/multiplayerServer/server/Networking -g -std=gnu++17 -o CMakeFiles/Server.dir/main.cpp.o -c /mnt/c/Users/maria/Dokumente/codes/C++/multiplayerServer/server/main.cpp",
-  "file": "/mnt/c/Users/maria/Dokumente/codes/C++/multiplayerServer/server/main.cpp"
-}
-]
