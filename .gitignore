@@ -1,25 +1,46 @@
-gitty
-gitty.pub
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
 *.o
-serverUnix/DataStructures/HashMap/
+*.obj
 
-/structures/binary_tree/cmake-build-debug/
-/others/Boost_Asio_Tutorial/cmake-build-debug/
-/multiplayerServer/cmake-build-debug/
-/LeetCode/cmake-build-debug/
-*.cmake
-*.txt
-*.c
-*.yaml
-*.bin
-*.json
+# Precompiled Headers
+*.gch
+*.pch
 
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
 
-/AudioProject2024-2025/Maximilian
-/AudioProject2024-2025/cmake-build-debug
-/AudioProject2024-2025/.idea
+# Fortran module files
+*.mod
+*.smod
 
-build
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
 
-cmake-build-debug
+# Executables
+*.exe
+*.out
+*.app
 
+# Whatever the F's
+*.iml
+*.name
+*.xml
+*.check_cache
+*.tlog
+*.vcxproj
+*.recipe
+*.lastbuildstate
+*.in
+*.pdb
+*.ninja
+*.log
