@@ -31,6 +31,8 @@ public:
 
     std::vector<std::string> CartesianProduct(std::string digits);
 
+    int ClimbingStairs(int stairs, std::string method);
+
 };
 
 

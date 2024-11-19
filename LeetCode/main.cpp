@@ -18,6 +18,11 @@ int main() {
 
     std::vector<std::vector<int>> matrix = {{1}};
 
+    for (int i = 0; i < ; ++i) {
+        
+    }
+    
     std::cout << leetCode.searchMatrix(matrix, 0);
         return 0;
+        
 }

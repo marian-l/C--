@@ -656,5 +656,16 @@ bool LeetCode::searchMatrix(std::vector<std::vector<int>> &matrix, int target) {
     return false;
 }
 
+int ClimbingStairs(int stairs, std::string method) {
+    if (method == "for") {
 
+    } else if (method == "recursion") {
 
+    } else if (method == "DP top-down") {
+
+    } else if (method == "DP bottom-up") {
+
+    } else if (method == "DP optimized") {
+
+    }
+}

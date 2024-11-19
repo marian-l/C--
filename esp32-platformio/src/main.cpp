@@ -61,22 +61,41 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
     // not sure what this AwsFrameInfo is, probably asyncWebServer
     AwsFrameInfo *info = (AwsFrameInfo*)arg;
 
-    // what are these tests?
-    if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
-        data[len] = 0;
+    if (len < 2) {
+        Serial.printf("Invalid message length: %d\n", len);
+        return;
+    }
 
-        // alternative Kommandos werden gebraucht.
-        // Eventuell Konfiguration der Sendeintervalle, Sleep-Modus und Ansteuern einzelner Sensoren, Status
+    // opcode implies that the websocket expects textual data (ASCII or UTF-8)
+    if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
+        data[len] = 0; // add null-terminator for data to be treated as string-array.
+
+        // data is a pointer to uint8_t, where each byte corresponds to a ACSII-char
         char main_command = data[0];
+
+        // shoudl print command
+        Serial.printf("Received command: %c\n", data[0]);
+
+        // ggf. handleCommand hier implementieren
         switch (main_command) {
             case 'r':
+                Serial.printf("Remove sensor: %c\n", data[1]);
                 handleRemoveSensor(data[1]); // pass the sensor to be removed
+                break;
             case 's':
-                handleSleepCommand(data[1]); // minutes of sleep
+                Serial.printf("Sleep for: %d\n", data[1]);
+                handleSleepCommand(data[1]); // minutes of sleep (1 byte -> 15min)
+                break;
             case 'i':
+                Serial.printf("Setting transmission interval to: every %d minutes", data[1]);
                 setInterval(data[1]);
+                break;
             case 'z':
                 getStatus(); // z für Zustand
+                break;
+            default:
+                Serial.printf("Unrecognized command: %c \n", main_command);
+                break;
         }
 
         // if (strcmp((char*)data, "Please, turn on the green LED.") == 0) {
