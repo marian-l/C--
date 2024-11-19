@@ -2,9 +2,9 @@
 #include <WiFi.h>
 #include "AsyncTCP.h"
 #include <ESPAsyncWebServer.h>
-#include <cstdint>
-#include "string"
-#include "list"
+#include "vector"
+#include <Wire.h>
+#include <BH1750.h>
 
 // #include <DHT.h> // This is a dependency of DHT22 temperature and humidity sensor used in the git
 
@@ -28,13 +28,13 @@ enum state {
 
 state current_state = SEND_ALL;
 
-const std::string light_sensor = "LIGHT";
-const std::string pressure_sensor = "AIR_PRESSURE";
-const std::string temperature_sensor = "TEMPERATURE";
-const std::string humidity_sensor = "HUMIDITY";
+constexpr const char *LIGHT_SENSOR = "LIGHT";
+constexpr const char *PRESSURE_SENSOR = "AIR_PRESSURE";
+constexpr const char *TEMPERATURE_SENSOR = "TEMPERATURE";
+constexpr const char *HUMIDITY_SENSOR = "HUMIDITY";
 
-const std::list<std::string> sensors = {humidity_sensor, light_sensor, pressure_sensor, temperature_sensor};
-std::list<std::string> sending_sensors = {humidity_sensor, light_sensor, pressure_sensor, temperature_sensor};
+const std::vector<String> sensors = {HUMIDITY_SENSOR, LIGHT_SENSOR, PRESSURE_SENSOR, TEMPERATURE_SENSOR};
+std::vector<String>  sending_sensors = {HUMIDITY_SENSOR, LIGHT_SENSOR, PRESSURE_SENSOR, TEMPERATURE_SENSOR};
 
 // get current state of the server (what is she/he doing)
 void getStatus() {
@@ -133,11 +133,15 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
             Serial.printf("WebSocket client #%u disconnected\n", client->id());
             break;
         case WS_EVT_DATA:
+            // print event info
+            Serial.printf("Client #%u sent data: %.*s (length: %d)\n", client->id(), len, data, len);
+
             // Handle received data
             handleWebSocketMessage(arg, data, len);
             break;
         case WS_EVT_PONG:
         case WS_EVT_ERROR:
+            Serial.printf("WebSocket error for client #%u\n", client->id());
             break;
     }
 }
@@ -145,10 +149,7 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
 void setup() {
     Serial.begin(115200); // Start ESP32 serial communication
 
-    dht.begin(); // Start DHT with initial parameters
-
-    pinMode(GREEN_LED_PIN, OUTPUT); // Set the green LED pin as output
-    pinMode(RED_LED_PIN, OUTPUT); // Set the red LED pin as output
+    // esp as a variable has a lot of members to look at.
 
     WiFi.softAP(ssid, password); // Start ESP32 Access Point mode
     Serial.println(WiFi.softAPIP()); // Print the websocket server IP to connect
@@ -160,6 +161,7 @@ void setup() {
 }
 
 void loop() {
+    Serial.printf("Free heap: %u bytes\n", ESP.getFreeHeap());
     ws.cleanupClients();
 }
 
