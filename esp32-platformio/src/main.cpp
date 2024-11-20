@@ -5,6 +5,7 @@
 #include "vector"
 #include <Wire.h>
 #include <BH1750.h>
+#include <SPI.h>
 
 // #include <DHT.h> // This is a dependency of DHT22 temperature and humidity sensor used in the git
 
@@ -152,7 +153,7 @@ void setup() {
     Serial.begin(115200); // Start ESP32 serial communication
 
     // initialize I2C Bus (BH1750 lib does not do it automatically
-    Wire.begin();
+    Wire.begin(); // Wire.begin(SDA, SCL)
 
     // Byte adresse und i2c Bus können auch versorgt werden
     lightSensor.begin(BH1750::CONTINUOUS_HIGH_RES_MODE);
