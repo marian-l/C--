@@ -36,6 +36,8 @@ constexpr const char *HUMIDITY_SENSOR = "HUMIDITY";
 const std::vector<String> sensors = {HUMIDITY_SENSOR, LIGHT_SENSOR, PRESSURE_SENSOR, TEMPERATURE_SENSOR};
 std::vector<String>  sending_sensors = {HUMIDITY_SENSOR, LIGHT_SENSOR, PRESSURE_SENSOR, TEMPERATURE_SENSOR};
 
+BH1750 lightSensor;
+
 // get current state of the server (what is she/he doing)
 void getStatus() {
 
@@ -149,6 +151,12 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
 void setup() {
     Serial.begin(115200); // Start ESP32 serial communication
 
+    // initialize I2C Bus (BH1750 lib does not do it automatically
+    Wire.begin();
+
+    // Byte adresse und i2c Bus können auch versorgt werden
+    lightSensor.begin(BH1750::CONTINUOUS_HIGH_RES_MODE);
+
     // esp as a variable has a lot of members to look at.
 
     WiFi.softAP(ssid, password); // Start ESP32 Access Point mode
@@ -161,7 +169,15 @@ void setup() {
 }
 
 void loop() {
+    // wie viel Speicher ist noch da?
     Serial.printf("Free heap: %u bytes\n", ESP.getFreeHeap());
+
+    // Lichtmessung
+    float lux = lightSensor.readLightLevel();
+    Serial.printf("Light level: %f lx \n", lux);
+
+    // machen, dass der ESP32 chillt
+    delay(1000);
     ws.cleanupClients();
 }
 
