@@ -9,19 +9,13 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 
-// #include <DHT.h> // This is a dependency of DHT22 temperature and humidity sensor used in the git
-
-// #define DHT_PIN 4 // this is the pin of the users sensor
-// #define DHT_TYPE DHT11 // this is the version of the sensor
-
-// DHT dht(DHT_PIN, DHT_TYPE);
+#define WIFI_SSID = "ESP32_MHML";
+#define WIFI_PASSWORD= "WIFI_PASSWORD";
 
 AsyncWebServer server(80);
 AsyncWebSocket ws("/");
 
-const char *ssid = "ESP32_MHML";
-const char *password = "password";
-
+// State of action for the ESP32
 enum state {
     SEND_ALL,
     SEND_PARTS,
@@ -31,13 +25,15 @@ enum state {
 
 state current_state = SEND_ALL;
 
+// available sensors
 constexpr const char *LIGHT_SENSOR = "LIGHT";
 constexpr const char *PRESSURE_SENSOR = "AIR_PRESSURE";
 constexpr const char *TEMPERATURE_SENSOR = "TEMPERATURE";
 constexpr const char *HUMIDITY_SENSOR = "HUMIDITY";
+constexpr const char *VOLUME_SENSOR = "VOLUME";
 
-const std::vector<String> sensors = {HUMIDITY_SENSOR, LIGHT_SENSOR, PRESSURE_SENSOR, TEMPERATURE_SENSOR};
-std::vector<String>  sending_sensors = {HUMIDITY_SENSOR, LIGHT_SENSOR, PRESSURE_SENSOR, TEMPERATURE_SENSOR};
+const std::vector<String> sensors = {HUMIDITY_SENSOR, LIGHT_SENSOR, PRESSURE_SENSOR, TEMPERATURE_SENSOR, VOLUME_SENSOR};
+std::vector<String>  sending_sensors = {HUMIDITY_SENSOR, LIGHT_SENSOR, PRESSURE_SENSOR, TEMPERATURE_SENSOR, VOLUME_SENSOR};
 
 BH1750 lightSensor;
 Adafruit_BME280 bme280;
@@ -46,6 +42,7 @@ float temperature;
 float humidity;
 float pressure;
 float lux;
+float volume;
 
 // get current state of the server (what is she/he doing)
 void getStatus() {
@@ -173,7 +170,7 @@ void setup() {
 
     // esp as a variable has a lot of members to look at.
 
-    WiFi.softAP(ssid, password); // Start ESP32 Access Point mode
+    WiFi.softAP(WIFI_SSID, WIFI_PASSWORD); // Start ESP32 Access Point mode
     Serial.println(WiFi.softAPIP()); // Print the websocket server IP to connect
 
     ws.onEvent(onEvent); // Start listening for events on the websocket server
