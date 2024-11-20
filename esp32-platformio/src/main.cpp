@@ -6,6 +6,8 @@
 #include <Wire.h>
 #include <BH1750.h>
 #include <SPI.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
 
 // #include <DHT.h> // This is a dependency of DHT22 temperature and humidity sensor used in the git
 
@@ -38,6 +40,12 @@ const std::vector<String> sensors = {HUMIDITY_SENSOR, LIGHT_SENSOR, PRESSURE_SEN
 std::vector<String>  sending_sensors = {HUMIDITY_SENSOR, LIGHT_SENSOR, PRESSURE_SENSOR, TEMPERATURE_SENSOR};
 
 BH1750 lightSensor;
+Adafruit_BME280 bme280;
+
+float temperature;
+float humidity;
+float pressure;
+float lux;
 
 // get current state of the server (what is she/he doing)
 void getStatus() {
@@ -158,6 +166,11 @@ void setup() {
     // Byte adresse und i2c Bus können auch versorgt werden
     lightSensor.begin(BH1750::CONTINUOUS_HIGH_RES_MODE);
 
+    // BME-Sensor
+    if(!bme280.begin(0x76)) {
+        Serial.println("BME280 konnte nicht gefunden werden!");
+    }
+
     // esp as a variable has a lot of members to look at.
 
     WiFi.softAP(ssid, password); // Start ESP32 Access Point mode
@@ -176,6 +189,16 @@ void loop() {
     // Lichtmessung
     float lux = lightSensor.readLightLevel();
     Serial.printf("Light level: %f lx \n", lux);
+
+    // Temperatur lesen
+    temperature = bme280.readTemperature();
+    //temp = 1.8*bme280.readTemperature() + 32;
+
+    // Luftfeuchtigkeit lesen
+    humidity = bme280.readHumidity();
+
+    // Luftdruck lesen
+    pressure = bme280.readPressure()/100.0F;
 
     // machen, dass der ESP32 chillt
     delay(1000);
