@@ -104,7 +104,23 @@ void setup_wifi() {
         return;
     }
 
+    // Explicitly initialize TCP/IP stack
+    result = esp_netif_init();
+    if (result != ESP_OK) {
+        Serial.println("Network Interface Initiation failed");
+    }
     Serial.printf("WiFi init result: %d\n", result);
+
+    esp_netif_t *netif_ap = esp_netif_get_handle_from_ifkey("WIFI_AP_DEF");
+    if (netif_ap) {
+        Serial.println("Existing AP netif detected. Destroying...");
+        esp_netif_destroy(netif_ap);
+    }
+
+    // get pointer the network interface instance
+    netif_ap = esp_netif_create_default_wifi_ap();
+    Serial.println("Creating netif_ap");
+    // esp_netif_obj* netif_ap = esp_netif_create_default_wifi_ap();
 
     result = esp_wifi_set_mode(WIFI_MODE_AP);
     Serial.printf("WiFi-Mode: %d\n", result);
@@ -116,7 +132,8 @@ void setup_wifi() {
         strcpy((char *) apConfig.ap.password, "rocking_stone");
         apConfig.ap.channel = 1;
         apConfig.ap.max_connection = 4;
-        apConfig.ap.authmode = WIFI_AUTH_WPA_WPA2_PSK;
+        // apConfig.ap.authmode = WIFI_AUTH_WPA_WPA2_PSK;
+        apConfig.ap.authmode = WIFI_AUTH_OPEN;
     }
 
     result = esp_wifi_set_config(WIFI_IF_AP, &apConfig);
@@ -131,16 +148,24 @@ void setup_wifi() {
         return;
     }
 
-    // if softAPIP fails
-    if (WiFi.softAPIP() == reinterpret_cast<const uint8_t *>("0.0.0.0")) {
-        tcpip_adapter_ip_info_t ip_info;
-        if (tcpip_adapter_get_ip_info(TCPIP_ADAPTER_IF_AP, &ip_info) == ESP_OK) {
-            Serial.printf("AP IP Address: %s\n", ip4addr_ntoa(&ip_info.ip));
-        } else {
-            Serial.println("Failed to retrieve IP address.");
-        }
+    // auto handle = esp_netif_get_handle_from_ifkey(netif_ap);
+
+    // Retrieve IP address of the AP
+    esp_netif_ip_info_t ip_info;
+    result = esp_netif_get_ip_info(netif_ap, &ip_info);
+    if (result == ESP_OK) {
+        Serial.printf("AP IP Address: %s\n", ip4addr_ntoa(reinterpret_cast<const ip4_addr_t *>(&ip_info.ip)));
+    } else {
+        Serial.printf("Failed to retrieve IP address: %s\n", esp_err_to_name(result));
     }
 
+    // configure DHCP
+    IPAddress local_IP(192, 168, 4, 1);    // Default AP IP address
+    IPAddress gateway(192, 168, 4, 1);    // Gateway IP
+    IPAddress subnet(255, 255, 255, 0);   // Subnet mask
+
+    result = esp_netif_dhcpc_start(netif_ap);
+    Serial.printf("DHCP-Status code: %d\n", result);
 
     Serial.printf("Free heap: %u bytes\n", ESP.getFreeHeap());
 }
@@ -196,12 +221,47 @@ void setup_wifi_alt() {
     // Serial.printf("WiFi-Result (.begin()): %d\n", wifi_result);
 }
 
+void wifiEventHandler(WiFiEvent_t event, WiFiEventInfo_t info) {
+    switch (event) {
+        case ARDUINO_EVENT_WIFI_AP_START:
+            Serial.println("ARDUINO_EVENT_WIFI_AP_START");
+            break;
+        case ARDUINO_EVENT_WIFI_AP_STAIPASSIGNED:
+            Serial.println("ARDUINO_EVENT_WIFI_AP_STAIPASSIGNED");
+            break;
+        case ARDUINO_EVENT_WIFI_AP_STACONNECTED:
+            Serial.printf("Device connected: %02X:%02X:%02X:%02X:%02X:%02X\n",
+                          info.wifi_ap_staconnected.mac[0], info.wifi_ap_staconnected.mac[1], info.wifi_ap_staconnected.mac[2],
+                          info.wifi_ap_staconnected.mac[3], info.wifi_ap_staconnected.mac[4], info.wifi_ap_staconnected.mac[5]);
+            break;
+        case ARDUINO_EVENT_WIFI_AP_STADISCONNECTED:
+            Serial.printf("Device disconnected: %02X:%02X:%02X:%02X:%02X:%02X\n",
+                          info.wifi_ap_stadisconnected.mac[0], info.wifi_ap_stadisconnected.mac[1], info.wifi_ap_stadisconnected.mac[2],
+                          info.wifi_ap_stadisconnected.mac[3], info.wifi_ap_stadisconnected.mac[4], info.wifi_ap_stadisconnected.mac[5]);
+            break;
+        default:
+            break;
+    }
+}
+
 void setup() {
     Serial.begin(115200); // Start ESP32 serial communication
 
     // esp as a variable has a lot of members to look at.
 
     setup_wifi();
+
+    // WiFi Event Handler
+    WiFi.onEvent(wifiEventHandler);
+
+    // Start listening for events on the websocket server
+    ws.onEvent(onEvent);
+
+    // Add the websocket server handler to the webserver
+    server.addHandler(&ws);
+
+    // Start listening for socket connections
+    server.begin();
 
     // Serve static HTML/JS files
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -332,11 +392,6 @@ void setup() {
 
     )rawliteral");
     });
-
-    ws.onEvent(onEvent); // Start listening for events on the websocket server
-    server.addHandler(&ws); // Add the websocket server handler to the webserver
-
-    server.begin(); // Start listening for socket connections
 }
 
 void notifyClients() {
