@@ -98,43 +98,16 @@ void setup_wifi() {
     wifi_init_config_t config = WIFI_INIT_CONFIG_DEFAULT();
 
     // Explicitly initialize the WiFi driver
-    esp_err_t init_result = esp_wifi_init(&config);
-    if (init_result != ESP_OK) {
-        Serial.printf("WiFi init failed: %d\n", init_result);
-        Serial.printf("WiFi-init err name: %s\n", esp_err_to_name(init_result));
+    esp_err_t result = esp_wifi_init(&config);
+    if (result != ESP_OK) {
+        Serial.printf("WiFi init failed: %d\n", result);
         return;
     }
 
-    Serial.printf("WiFi init result: %d\n", init_result);
+    Serial.printf("WiFi init result: %d\n", result);
 
-    // WiFi.disconnect(true);
-    // WiFi.mode(WIFI_OFF);
-    // delay(100);
-
-    // int WiFiStatus = WiFi.begin("ambient_disco_ap", "rocking_stone", 1);
-    // Serial.printf("WiFiStatus %d\n", WiFiStatus);
-
-    bool result = WiFi.mode(WIFI_AP);
-    Serial.printf("Wifi-Mode: %d\n", result);
-
-    esp_err_t esp_result;
-
-    if (!result) {
-        esp_result = esp_wifi_set_mode(WIFI_MODE_AP);
-    }
-
-    if (esp_result != ESP_OK) {
-        Serial.printf("Failed to use ESP-method to set WiFi-mode: %s\n", esp_err_to_name(esp_result));
-        Serial.printf("Failed to use ESP-method to set WiFi-mode: %d\n", esp_result);
-        return;
-    }
-
-    // Start ESP32 Access Point mode (ssid password channels ssid_hidden max_connection)
-    if (!WiFi.softAP("ambient_disco_ap", "rocking_stone", 1, 0, 4)) {
-        Serial.println("Failed to start Access Point!");
-
-        result = false;
-    }
+    result = esp_wifi_set_mode(WIFI_MODE_AP);
+    Serial.printf("WiFi-Mode: %d\n", result);
 
     wifi_config_t apConfig = {};
 
@@ -146,30 +119,17 @@ void setup_wifi() {
         apConfig.ap.authmode = WIFI_AUTH_WPA_WPA2_PSK;
     }
 
-    esp_result = esp_wifi_set_config(WIFI_IF_AP, &apConfig);
-    if (esp_result != ESP_OK) {
-        Serial.printf("Failed to configure AP: %s\n", esp_err_to_name(result));
-        Serial.printf("Failed to configure AP: %d\n", esp_result);
+    result = esp_wifi_set_config(WIFI_IF_AP, &apConfig);
+    if (result != ESP_OK) {
+        Serial.printf("Failed to configure AP: %d\n", result);
         return;
     }
 
     result = esp_wifi_start();
     if (result != ESP_OK) {
-        Serial.printf("Failed to start WiFi: %s\n", esp_err_to_name(result));
-        Serial.printf("Failed to start WiFi: %d\n", esp_result);
+        Serial.printf("Failed to start WiFi: %d\n", result);
         return;
     }
-
-    // Start ESP32 Access Point mode (ssid password channels ssid_hidden max_connection)
-    if (!WiFi.softAP("ambient_disco_ap", "rocking_stone", 1, 0, 4)) {
-        Serial.println("Failed to start Access Point!");
-
-        result = false;
-    }
-
-    Serial.printf("Free heap: %u bytes\n", ESP.getFreeHeap());
-
-    Serial.printf("Access Point IP: %s\n", WiFi.softAPIP().toString().c_str());
 
     // if softAPIP fails
     if (WiFi.softAPIP() == reinterpret_cast<const uint8_t *>("0.0.0.0")) {
@@ -180,6 +140,60 @@ void setup_wifi() {
             Serial.println("Failed to retrieve IP address.");
         }
     }
+
+
+    Serial.printf("Free heap: %u bytes\n", ESP.getFreeHeap());
+}
+
+void setup_wifi_alt() {
+    return;
+    // if (result != ESP_OK) {
+    //     result = esp_wifi_set_mode(WIFI_AP);
+    //     Serial.printf("WiFi-Mode: %d\n", result);
+    // }
+
+    // if (result != ESP_OK) {
+    // Serial.printf("Failed to use ESP-method to set WiFi-mode: %s\n", esp_err_to_name(result));
+    // Serial.printf("Failed to use ESP-method to set WiFi-mode: %d\n", result);
+    // return;
+    // }
+
+    // both give true, should be working?
+    // String error = WiFi.softAPtest("ambient_disco_ap", NULL, 1, 0, 4, 0);
+    // Serial.printf("softApTestResult: %s\n", error.c_str());
+//
+    // String error = WiFi.softAPtest("ambient_disco_ap", NULL, 1, 0, 4, 1);
+    // Serial.printf("softApTestResult with FTM: %s\n", error.c_str());
+
+    // Start ESP32 Access Point mode (ssid password channels ssid_hidden max_connection)
+    // result = WiFi.softAP("ambient_disco_ap", nullptr, 1, 0, 4, 1);
+    // Serial.printf("Access-Point setup: %d\n", result);
+
+
+
+    // Start ESP32 Access Point mode (ssid password channels ssid_hidden max_connection)
+    // if (!WiFi.softAP("ambient_disco_ap", "rocking_stone", 1, 0, 4)) {
+    //     Serial.println("Failed to start Access Point!");
+//
+    //     result = false;
+    // }
+
+    // Serial.printf("Access Point IP: %s\n", WiFi.softAPIP().toString().c_str());
+
+    // Serial.println("Access Point started successfully.");
+    // Serial.print("AP IP Address: ");
+    // Serial.println(WiFi.softAPIP());
+
+    // IPAddress local_IP(192, 168, 1, 64);    // Set a static IP
+    // IPAddress gateway(192, 168, 1, 1);    // Gateway IP
+    // IPAddress subnet(255, 255, 255, 0);   // Subnet mask
+
+    // if (!WiFi.softAPConfig(local_IP, gateway, subnet)) {
+    //     Serial.println("Failed to configure AP network settings");
+    // }
+
+    // wl_status_t wifi_result = WiFi.begin();
+    // Serial.printf("WiFi-Result (.begin()): %d\n", wifi_result);
 }
 
 void setup() {
