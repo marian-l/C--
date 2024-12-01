@@ -14,7 +14,7 @@
 // const char * ssid = "Vodafone-6874";
 // const char * password = "LTHrrxqXgrMr2q9G";
 
-AsyncWebServer server(80);
+AsyncWebServer as_server(80);
 AsyncWebSocket ws("/");
 
 // State of action for the ESP32
@@ -89,6 +89,60 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
         case WS_EVT_PONG:
         case WS_EVT_ERROR:
             Serial.printf("WebSocket error for client #%u\n", client->id());
+            break;
+    }
+}
+
+// Event handler function
+void WiFiEventHandler(WiFiEvent_t event, WiFiEventInfo_t info) {
+    Serial.println("Called WiFi Event Handler");
+    switch (event) {
+            // Wi-Fi AP Events
+        case ARDUINO_EVENT_WIFI_AP_START:
+            Serial.println("WiFi AP Started");
+            break;
+        case ARDUINO_EVENT_WIFI_AP_STOP:
+            Serial.println("WiFi AP Stopped");
+            break;
+        case ARDUINO_EVENT_WIFI_AP_STACONNECTED:
+            Serial.printf("WiFi AP: Station Connected - MAC: %02X:%02X:%02X:%02X:%02X:%02X\n",
+                          info.wifi_ap_staconnected.mac[0],
+                          info.wifi_ap_staconnected.mac[1],
+                          info.wifi_ap_staconnected.mac[2],
+                          info.wifi_ap_staconnected.mac[3],
+                          info.wifi_ap_staconnected.mac[4],
+                          info.wifi_ap_staconnected.mac[5]);
+            break;
+        case ARDUINO_EVENT_WIFI_AP_STADISCONNECTED:
+            Serial.printf("WiFi AP: Station Disconnected - MAC: %02X:%02X:%02X:%02X:%02X:%02X\n",
+                          info.wifi_ap_stadisconnected.mac[0],
+                          info.wifi_ap_stadisconnected.mac[1],
+                          info.wifi_ap_stadisconnected.mac[2],
+                          info.wifi_ap_stadisconnected.mac[3],
+                          info.wifi_ap_stadisconnected.mac[4],
+                          info.wifi_ap_stadisconnected.mac[5]);
+            break;
+        case ARDUINO_EVENT_WIFI_AP_PROBEREQRECVED:
+            Serial.printf("WiFi AP: Probe Request Received - RSSI: %d\n", info.wifi_ap_probereqrecved.rssi);
+            break;
+
+            // Wi-Fi Event Errors
+        case ARDUINO_EVENT_WPS_ER_SUCCESS:
+            Serial.println("WiFi WPS: Success");
+            break;
+        case ARDUINO_EVENT_WPS_ER_FAILED:
+            Serial.println("WiFi WPS: Failed");
+            break;
+        case ARDUINO_EVENT_WPS_ER_TIMEOUT:
+            Serial.println("WiFi WPS: Timeout");
+            break;
+        case ARDUINO_EVENT_WIFI_STA_LOST_IP:
+            Serial.printf("WiFi WPS: PIN - %s\n", info.wps_er_pin.pin_code);
+            break;
+
+            // Default Event
+        default:
+            Serial.printf("Unhandled WiFi Event: %d\n", event);
             break;
     }
 }
@@ -168,228 +222,151 @@ void setup_wifi() {
     Serial.printf("DHCP-Status code: %d\n", result);
 
     Serial.printf("Free heap: %u bytes\n", ESP.getFreeHeap());
+
+    // WiFi Event Handler
+    WiFi.onEvent(WiFiEventHandler);
 }
 
-void setup_wifi_alt() {
-    return;
-    // if (result != ESP_OK) {
-    //     result = esp_wifi_set_mode(WIFI_AP);
-    //     Serial.printf("WiFi-Mode: %d\n", result);
-    // }
-
-    // if (result != ESP_OK) {
-    // Serial.printf("Failed to use ESP-method to set WiFi-mode: %s\n", esp_err_to_name(result));
-    // Serial.printf("Failed to use ESP-method to set WiFi-mode: %d\n", result);
-    // return;
-    // }
-
-    // both give true, should be working?
-    // String error = WiFi.softAPtest("ambient_disco_ap", NULL, 1, 0, 4, 0);
-    // Serial.printf("softApTestResult: %s\n", error.c_str());
-//
-    // String error = WiFi.softAPtest("ambient_disco_ap", NULL, 1, 0, 4, 1);
-    // Serial.printf("softApTestResult with FTM: %s\n", error.c_str());
-
-    // Start ESP32 Access Point mode (ssid password channels ssid_hidden max_connection)
-    // result = WiFi.softAP("ambient_disco_ap", nullptr, 1, 0, 4, 1);
-    // Serial.printf("Access-Point setup: %d\n", result);
-
-
-
-    // Start ESP32 Access Point mode (ssid password channels ssid_hidden max_connection)
-    // if (!WiFi.softAP("ambient_disco_ap", "rocking_stone", 1, 0, 4)) {
-    //     Serial.println("Failed to start Access Point!");
-//
-    //     result = false;
-    // }
-
-    // Serial.printf("Access Point IP: %s\n", WiFi.softAPIP().toString().c_str());
-
-    // Serial.println("Access Point started successfully.");
-    // Serial.print("AP IP Address: ");
-    // Serial.println(WiFi.softAPIP());
-
-    // IPAddress local_IP(192, 168, 1, 64);    // Set a static IP
-    // IPAddress gateway(192, 168, 1, 1);    // Gateway IP
-    // IPAddress subnet(255, 255, 255, 0);   // Subnet mask
-
-    // if (!WiFi.softAPConfig(local_IP, gateway, subnet)) {
-    //     Serial.println("Failed to configure AP network settings");
-    // }
-
-    // wl_status_t wifi_result = WiFi.begin();
-    // Serial.printf("WiFi-Result (.begin()): %d\n", wifi_result);
-}
-
-void wifiEventHandler(WiFiEvent_t event, WiFiEventInfo_t info) {
-    switch (event) {
-        case ARDUINO_EVENT_WIFI_AP_START:
-            Serial.println("ARDUINO_EVENT_WIFI_AP_START");
-            break;
-        case ARDUINO_EVENT_WIFI_AP_STAIPASSIGNED:
-            Serial.println("ARDUINO_EVENT_WIFI_AP_STAIPASSIGNED");
-            break;
-        case ARDUINO_EVENT_WIFI_AP_STACONNECTED:
-            Serial.printf("Device connected: %02X:%02X:%02X:%02X:%02X:%02X\n",
-                          info.wifi_ap_staconnected.mac[0], info.wifi_ap_staconnected.mac[1], info.wifi_ap_staconnected.mac[2],
-                          info.wifi_ap_staconnected.mac[3], info.wifi_ap_staconnected.mac[4], info.wifi_ap_staconnected.mac[5]);
-            break;
-        case ARDUINO_EVENT_WIFI_AP_STADISCONNECTED:
-            Serial.printf("Device disconnected: %02X:%02X:%02X:%02X:%02X:%02X\n",
-                          info.wifi_ap_stadisconnected.mac[0], info.wifi_ap_stadisconnected.mac[1], info.wifi_ap_stadisconnected.mac[2],
-                          info.wifi_ap_stadisconnected.mac[3], info.wifi_ap_stadisconnected.mac[4], info.wifi_ap_stadisconnected.mac[5]);
-            break;
-        default:
-            break;
-    }
-}
-
+    // esp as a variable has a lot of members to look at.
 void setup() {
     Serial.begin(115200); // Start ESP32 serial communication
 
-    // esp as a variable has a lot of members to look at.
-
     setup_wifi();
-
-    // WiFi Event Handler
-    WiFi.onEvent(wifiEventHandler);
 
     // Start listening for events on the websocket server
     ws.onEvent(onEvent);
 
     // Add the websocket server handler to the webserver
-    server.addHandler(&ws);
+    as_server.addHandler(&ws);
 
     // Start listening for socket connections
-    server.begin();
+    as_server.begin();
 
     // Serve static HTML/JS files
-    server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    as_server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(200, "text/html", R"rawliteral(
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <title>Web Audio API Demo</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                text-align: center;
-                padding: 2em;
-            }
+        <!DOCTYPE html>
+        <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta content="width=device-width, initial-scale=1.0" name="viewport">
+                <title>Web Audio API Demo</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        text-align: center;
+                        pWiFiEventHandler         }
 
-            input[type="range"] {
-                width: 300px;
-                margin: 1em;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Web Audio API Demo</h1>
-        <p>Use the sliders below to adjust the frequency and volume of the tone.</p>
+                    input[type="range"] {
+                        width: 300px;
+                        margin: 1em;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Web Audio API Demo</h1>
+                <p>Use the sliders below to adjust the frequency and volume of the tone.</p>
 
-        <div>
-            <label for="frequency">Frequency (Hz): <span id="freq-value">440</span></label><br>
-            <input id="frequency" max="2000" min="100" type="range" value="440">
-        </div>
+                <div>
+                    <label for="frequency">Frequency (Hz): <span id="freq-value">440</span></label><br>
+                    <input id="frequency" max="2000" min="100" type="range" value="440">
+                </div>
 
-        <div>
-            <label for="volume">Volume: <span id="vol-value">50</span></label><br>
-            <input id="volume" max="100" min="0" type="range" value="50">
-        </div>
+                <div>
+                    <label for="volume">Volume: <span id="vol-value">50</span></label><br>
+                    <input id="volume" max="100" min="0" type="range" value="50">
+                </div>
 
-        <button id="start">Start Tone</button>
-        <button id="stop">Stop Tone</button>
+                <button id="start">Start Tone</button>
+                <button id="stop">Stop Tone</button>
 
-        <script>
-            const ws = new WebSocket("ws://" + location.host + "/");
+                <script>
+                    const ws = new WebSocket("ws://" + location.host + "/");
 
-            ws.onopen = () => {
-                console.log("WebSocket connected");
-            }
+                    ws.onopen = () => {
+                        console.log("WebSocket connected");
+                    }
 
-            ws.onmessage = (event) => {
-                const sensorData = JSON.parse(event.data);
-                console.log("Received following data: ", sensorData);
+                    ws.onmessage = (event) => {
+                        const sensorData = JSON.parse(event.data);
+                        console.log("Received following data: ", sensorData);
 
-                // first only the single oscillator
-                if (oscillator) {
-                    const frequency = 200 + sensorData.temperature * 10;
-                    const volume = sensorData.humidity / 100;
-                    const light = sensorData.light / 100;
+                        // first only the single oscillator
+                        if (oscillator) {
+                            const frequency = 200 + sensorData.temperature * 10;
+                            const volume = sensorData.humidity / 100;
+                            const light = sensorData.light / 100;
 
-                    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-                    gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+                            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
 
-                    // fun effects
-                    modulationNode.gain.setValueAtTime(light, audioContext.currentTime);
-                }
-            }
+                            // fun effects
+                            modulationNode.gain.setValueAtTime(light, audioContext.currentTime);
+                        }
+                    }
 
-            let audioContext = null;
-            let oscillator = null;
-            let gainNode = null;
+                    let audioContext = null;
+                    let oscillator = null;
+                    let gainNode = null;
 
-            // Initialize Audio Context
-            function initAudio() {
-                if (!audioContext) {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    oscillator = audioContext.createOscillator();
-                    gainNode = audioContext.createGain();
-                    modulationNode = audioContext.createGain();
-                    modulationOscilattor = audioContext.createOscillator();
+                    // Initialize Audio Context
+                    function initAudio() {
+                        if (!audioContext) {
+                            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                            oscillator = audioContext.createOscillator();
+                            gainNode = audioContext.createGain();
+                            modulationNode = audioContext.createGain();
+                            modulationOscilattor = audioContext.createOscillator();
 
-                    oscillator.type = 'sine'; // Type of wave: sine, square, sawtooth, triangle
-                    oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // Default frequency: 440Hz
-                    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // Default volume: 50%
+                            oscillator.type = 'sine'; // Type of wave: sine, square, sawtooth, triangle
+                            oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // Default frequency: 440Hz
+                            gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // Default volume: 50%
 
-                    // Connect nodes: Oscillator -> Gain -> Destination
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
+                            // Connect nodes: Oscillator -> Gain -> Destination
+                            oscillator.connect(gainNode);
+                            gainNode.connect(audioContext.destination);
 
-                    oscillator.start(); // Start the oscillator immediately
-                    gainNode.gain.setValueAtTime(0, audioContext.currentTime); // Mute initially
-                }
-            }
+                            oscillator.start(); // Start the oscillator immediately
+                            gainNode.gain.setValueAtTime(0, audioContext.currentTime); // Mute initially
+                        }
+                    }
 
-            // Start the tone
-            document.getElementById('start').addEventListener('click', () => {
-                initAudio();
-                gainNode.gain.setValueAtTime(
-                    document.getElementById('volume').value / 100,
-                    audioContext.currentTime
-                );
-            });
+                    // Start the tone
+                    document.getElementById('start').addEventListener('click', () => {
+                        initAudio();
+                        gainNode.gain.setValueAtTime(
+                            document.getElementById('volume').value / 100,
+                            audioContext.currentTime
+                        );
+                    });
 
-            // Stop the tone
-            document.getElementById('stop').addEventListener('click', () => {
-                if (audioContext) {
-                    gainNode.gain.setValueAtTime(0, audioContext.currentTime); // Mute the sound
-                }
-            });
+                    // Stop the tone
+                    document.getElementById('stop').addEventListener('click', () => {
+                        if (audioContext) {
+                            gainNode.gain.setValueAtTime(0, audioContext.currentTime); // Mute the sound
+                        }
+                    });
 
-            // Adjust frequency
-            document.getElementById('frequency').addEventListener('input', (event) => {
-                const frequency = event.target.value;
-                document.getElementById('freq-value').textContent = frequency;
-                if (oscillator) {
-                    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-                }
-            });
+                    // Adjust frequency
+                    document.getElementById('frequency').addEventListener('input', (event) => {
+                        const frequency = event.target.value;
+                        document.getElementById('freq-value').textContent = frequency;
+                        if (oscillator) {
+                            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                        }
+                    });
 
-            // Adjust volume
-            document.getElementById('volume').addEventListener('input', (event) => {
-                const volume = event.target.value;
-                document.getElementById('vol-value').textContent = volume;
-                if (gainNode) {
-                    gainNode.gain.setValueAtTime(volume / 100, audioContext.currentTime);
-                }
-            });
-        </script>
-    </body>
-</html>
-
+                    // Adjust volume
+                    document.getElementById('volume').addEventListener('input', (event) => {
+                        const volume = event.target.value;
+                        document.getElementById('vol-value').textContent = volume;
+                        if (gainNode) {
+                            gainNode.gain.setValueAtTime(volume / 100, audioContext.currentTime);
+                        }
+                    });
+                </script>
+            </body>
+        </html>
     )rawliteral");
     });
 }
