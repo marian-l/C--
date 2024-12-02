@@ -227,7 +227,7 @@ void setup() {
     }
 
     result = esp_netif_is_netif_up(netif_ap);
-    Serial.printf("Network Interface is (1=up, 0=down): %d\n", result);
+    Serial.printf("Network Interface is (0=up, 1=down): %d\n", result);
 
     // configure DHCP
     esp_netif_ip_info_t ip_info;
@@ -253,7 +253,7 @@ void setup() {
 
     // WiFi Event Handler
     wifi_event_id_t wifi_event = WiFi.onEvent(WiFiEventHandler);
-    Serial.printf("WiFi Event Handler registered with ID: %d\n", wifi_event);
+    Serial.printf("Amount of WiFi Event Handlers registered: %d\n", wifi_event);
 
     // Start WiFi
     result = esp_wifi_start();
@@ -276,10 +276,10 @@ void setup() {
     // let everything settle
     delay(1000);
 
+    // create server and socket
     static AsyncWebServer as_server(80);
+    delay(1000);
     static AsyncWebSocket ws("/ws");
-
-    // wait for creation?
     delay(1000);
 
     // debug server and socket ---> printing the address of the server freezes the program
