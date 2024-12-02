@@ -203,10 +203,10 @@ void setup() {
     strcpy((char *) apConfig.ap.password, "rocking_stone");
     apConfig.ap.channel = 1;
     apConfig.ap.max_connection = 4;// apConfig.ap.authmode = WIFI_AUTH_WPA_WPA2_PSK;
+    apConfig.ap.authmode = WIFI_AUTH_OPEN;
 
     // Setter for Configuration
     result = esp_wifi_set_config(WIFI_IF_AP, &apConfig);
-    apConfig.ap.authmode = WIFI_AUTH_OPEN;
     if (result != ESP_OK) {
         Serial.printf("Failed to configure AP: %d\n", result);
         return;
@@ -277,22 +277,14 @@ void setup() {
     delay(1000);
 
     // create server and socket
-    static AsyncWebServer as_server(80);
-    delay(1000);
-    static AsyncWebSocket ws("/ws");
+    static AsyncWebServer as_server(81);
     delay(1000);
 
-    // debug server and socket ---> printing the address of the server freezes the program
-    Serial.printf("Address of as_server: %p\n", &as_server);
-    Serial.printf("Address of ws: %p\n", &ws);
+    static AsyncWebSocket ws("/weppsocket");
+    delay(1000);
 
-    as_server_pt = &as_server;
-    ws_pt = &ws;
-
-    if (as_server_pt == nullptr || ws_pt == nullptr) {
-        Serial.println("Failed to initialize server or WebSocket!");
-        return;
-    }
+    Serial.printf("Address of as_server: %p\n", (void*)&as_server);
+    Serial.printf("Address of ws: %p\n", (void*)&ws);
 
     // Start listening for events on the websocket server
     Serial.println("ws.onEvent()");
