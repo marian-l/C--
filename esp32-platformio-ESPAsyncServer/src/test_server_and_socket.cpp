@@ -149,112 +149,13 @@ void WiFiEventHandler(arduino_event_id_t event, arduino_event_info_t info) {
     }
 }
 
-void setup_wifi() {
-    // Explicitly initialize TCP/IP stack
-    esp_err_t result = esp_netif_init();
-    if (result != ESP_OK) {
-        Serial.println("Network Interface Initiation failed");
-    }
-    Serial.printf("Network Interface Init result: %d\n", result);
-
-    // WiFi config
-    wifi_init_config_t config = WIFI_INIT_CONFIG_DEFAULT();
-
-    // Explicitly initialize the WiFi driver
-    result = esp_wifi_init(&config);
-    if (result != ESP_OK) {
-        Serial.printf("WiFi init failed: %d\n", result);
-        return;
-    }
-    Serial.printf("WiFi-Driver Init result: %d\n", result);
-
-    wifi_config_t apConfig = {};
-
-    if (!result) {
-        strcpy((char *) apConfig.ap.ssid, "ambient_disco_ap");
-        strcpy((char *) apConfig.ap.password, "rocking_stone");
-        apConfig.ap.channel = 1;
-        apConfig.ap.max_connection = 4;
-        // apConfig.ap.authmode = WIFI_AUTH_WPA_WPA2_PSK;
-        apConfig.ap.authmode = WIFI_AUTH_OPEN;
-
-    }
-
-    result = esp_wifi_set_config(WIFI_IF_AP, &apConfig);
-    if (result != ESP_OK) {
-        Serial.printf("Failed to configure AP: %d\n", result);
-        return;
-    }
-    Serial.printf("WiFi Configuration result: %d\n", result);
-
-    esp_netif_t *netif_ap = esp_netif_get_handle_from_ifkey("WIFI_AP_DEF");
-    if (netif_ap) {
-        Serial.println("Existing AP netif detected.");
-        // esp_netif_destroy(netif_ap);
-        // netif_ap = esp_netif_create_default_wifi_ap();
-        // Serial.println("Creating netif_ap");
-
-        // get pointer the network interface instance
-        // esp_netif_obj* netif_ap = esp_netif_create_default_wifi_ap();
-    }
-
-    wifi_mode_t wifi_mode;
-    result = esp_wifi_get_mode(&wifi_mode);
-    Serial.printf("Get WiFi-Mode: %d\n", result);
-
-    result = esp_wifi_set_mode(WIFI_MODE_AP);
-    Serial.printf("Changing WiFi-Mode: %d\n", result);
-
-    result = esp_wifi_get_mode(&wifi_mode);
-    Serial.printf("Get WiFi-Mode: %d\n", result);
-
-    result = esp_wifi_start();
-    if (result != ESP_OK) {
-        Serial.printf("Failed to start WiFi: %d\n", result);
-        return;
-    }
-
-    // auto handle = esp_netif_get_handle_from_ifkey(netif_ap);
-
-    // Retrieve IP address of the AP
-    esp_netif_ip_info_t ip_info;
-    result = esp_netif_get_ip_info(netif_ap, &ip_info);
-    if (result == ESP_OK) {
-        Serial.printf("AP IP Address: %s\n", ip4addr_ntoa(reinterpret_cast<const ip4_addr_t *>(&ip_info.ip)));
-    } else {
-        Serial.printf("Failed to retrieve IP address: %s\n", esp_err_to_name(result));
-    }
-
-    // configure DHCP
-    IPAddress local_IP(192, 168, 4, 1);    // Default AP IP address
-    IPAddress gateway(192, 168, 4, 1);    // Gateway IP
-    IPAddress subnet(255, 255, 255, 0);   // Subnet mask
-
-    // result = esp_netif_dhcpc_start(netif_ap);
-    // start DHCP Server
-    result = esp_netif_dhcps_start(netif_ap);
-    Serial.printf("DHCP-Server-Status code: %d\n", result);
-
-    // check Server Status
-    esp_netif_dhcp_status_t dhcps_status;
-    result = esp_netif_dhcps_get_status(netif_ap, &dhcps_status);
-
-    Serial.printf("DHCP-Status after getter: %d\n", result);
-    Serial.printf("DHCP-Status after getter: %d\n", dhcps_status);
-
-    // wie viel Speicher ist noch da?
-    Serial.printf("Free heap: %u bytes\n", ESP.getFreeHeap());
-}
-
-    // esp as a variable has a lot of members to look at.
 void setup() {
+    // esp as a variable has a lot of members to look at.
     // increase log level for debugging purposes
     esp_log_level_set("*", ESP_LOG_VERBOSE);
 
     Serial.begin(115200); // Start ESP32 serial communication
 
-    // setup_wifi();
-////////////////////////////
     // TCP/IP stack
     esp_err_t result = esp_netif_init();
     if (result != ESP_OK) {
@@ -271,27 +172,18 @@ void setup() {
     }
     Serial.printf("WiFi-Driver Init result: %d\n", result);
 
-    // Access-Point Configuration
-    wifi_config_t apConfig = {};
-    strcpy((char *) apConfig.ap.ssid, "ambient_disco_ap");
-    strcpy((char *) apConfig.ap.password, "rocking_stone");
-    apConfig.ap.channel = 1;
-    apConfig.ap.max_connection = 4;// apConfig.ap.authmode = WIFI_AUTH_WPA_WPA2_PSK;
-
-    // Access-Point Setup
-    result = esp_wifi_set_config(WIFI_IF_AP, &apConfig);
-    apConfig.ap.authmode = WIFI_AUTH_OPEN;
-    if (result != ESP_OK) {
-        Serial.printf("Failed to configure AP: %d\n", result);
-        return;
-    }
-    Serial.printf("WiFi Configuration result: %d\n", result);
-
     // Network Interface
-    esp_netif_t *netif_ap = esp_netif_get_handle_from_ifkey("WIFI_AP_DEF");
-    if (netif_ap) {
-        Serial.println("Existing AP netif detected.");
+    esp_netif_t *netif_ap = esp_netif_create_default_wifi_ap();
+    if (!netif_ap) {
+        Serial.println("Network Interface AP Creation failed");
+    } // attach network interface for ap mode
+    result = esp_netif_attach_wifi_ap(netif_ap);
+    if (result != ESP_OK) {
+        Serial.printf("WiFi-AP and Network Interface could not be connected: %d\n", result);
     }
+    // manual creation
+    // esp_netif_t *netif_ap = esp_netif_get_handle_from_ifkey("WIFI_AP_DEF");
+    // result = esp_netif_attach_wifi_ap(netif_ap);
 
     // Check WiFi-Mode
     wifi_mode_t wifi_mode;
@@ -305,6 +197,38 @@ void setup() {
         Serial.printf("Get WiFi-Mode: %d\n", result);
     }
 
+    // Access-Point Configuration
+    wifi_config_t apConfig = {};
+    strcpy((char *) apConfig.ap.ssid, "ambient_disco_ap");
+    strcpy((char *) apConfig.ap.password, "rocking_stone");
+    apConfig.ap.channel = 1;
+    apConfig.ap.max_connection = 4;// apConfig.ap.authmode = WIFI_AUTH_WPA_WPA2_PSK;
+
+    // Setter for Configuration
+    result = esp_wifi_set_config(WIFI_IF_AP, &apConfig);
+    apConfig.ap.authmode = WIFI_AUTH_OPEN;
+    if (result != ESP_OK) {
+        Serial.printf("Failed to configure AP: %d\n", result);
+        return;
+    }
+    Serial.printf("WiFi Configuration result: %d\n", result);
+
+    // stop DHCP-Client and Server (just in case they are up) to configure the DHCP-Server
+    result = esp_netif_dhcpc_stop(netif_ap); // Stop DHCP client (if running)
+    if (result == ESP_ERR_ESP_NETIF_DHCP_NOT_STOPPED) {
+        Serial.printf("DHCP Client was already stopped.");
+    }
+    else if (result != ESP_OK) {
+        Serial.printf("Failed to stop DHCP client: %s\n", esp_err_to_name(result));
+    }
+    result = esp_netif_dhcps_stop(netif_ap); // Stop DHCP server
+    if (result != ESP_ERR_ESP_NETIF_DHCP_ALREADY_STOPPED && result != ESP_OK) {
+        Serial.printf("Failed to stop DHCP server: %s\n", esp_err_to_name(result));
+    }
+
+    result = esp_netif_is_netif_up(netif_ap);
+    Serial.printf("Network Interface is (1=up, 0=down): %d\n", result);
+
     // configure DHCP
     esp_netif_ip_info_t ip_info;
     ip_info.ip.addr = ESP_IP4TOADDR(192, 168, 4, 1); // Local IP
@@ -315,6 +239,7 @@ void setup() {
         Serial.printf("Failed to set IP info: %s\n", esp_err_to_name(result));
         return;
     }
+    Serial.println("Static IP set.");
 
     // start DHCP Server
     result = esp_netif_dhcps_start(netif_ap);
@@ -323,13 +248,11 @@ void setup() {
     // check Server Status
     esp_netif_dhcp_status_t dhcps_status;
     result = esp_netif_dhcps_get_status(netif_ap, &dhcps_status);
-
     Serial.printf("DHCP-Result after getter: %d\n", result);
     Serial.printf("DHCP-Status after getter: %d\n", dhcps_status);
 
     // WiFi Event Handler
-    wifi_event_id_t wifi_event;
-    wifi_event = WiFi.onEvent(WiFiEventHandler);
+    wifi_event_id_t wifi_event = WiFi.onEvent(WiFiEventHandler);
     Serial.printf("WiFi Event Handler registered with ID: %d\n", wifi_event);
 
     // Start WiFi
@@ -349,7 +272,8 @@ void setup() {
 
     // wie viel Speicher ist noch da?
     Serial.printf("Free heap: %u bytes\n", ESP.getFreeHeap());
-////////////////////////////
+
+    // let everything settle
     delay(1000);
 
     static AsyncWebServer as_server(80);
@@ -524,7 +448,6 @@ void notifyClients() {
         ws_pt->textAll(jsonData); // Send data to all connected WebSocket clients
     }
 }
-int i = 0;
 
 void loop() {
     delay(500);
@@ -556,6 +479,12 @@ void loop() {
     }
 }
 
+int main() {
+    setup();
+    while (true) {
+        loop();
+    }
+}
 // debug backtrace with xtensa-tool
 // C:\Users\maria\Dokumente\codes\C++\esp32-platformio-ESPAsyncServer\.pio\build\esp32dev>
 // C:\Users\maria\.platformio\packages\toolchain-xtensa-esp32\bin\xtensa-esp32-elf-addr2line.exe -e firmware.elf 0x4014ecc8:0x3ffb21e0 0x400d9dd5:0x3ffb2200 0x400d2d8a:0x3ffb2220 0x400de102:0x3ffb2290
