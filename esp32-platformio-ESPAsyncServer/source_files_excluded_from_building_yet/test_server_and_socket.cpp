@@ -10,11 +10,9 @@
 #include "Adafruit_BME280.h"
 #include "esp_wifi.h"
 
-AsyncWebServer *as_server_pt;
-AsyncWebSocket *ws_pt;
+static AsyncWebServer as_server(81);
+static AsyncWebSocket ws("/ws");
 
-// AsyncWebSocket *ws = new AsyncWebSocket("/");
-// std::unique_ptr<AsyncWebSocket> ws(new AsyncWebSocket("/ws"));
 // State of action for the ESP32
 enum state {
     SEND_ALL,
@@ -277,11 +275,11 @@ void setup() {
     delay(1000);
 
     // create server and socket
-    static AsyncWebServer as_server(81);
-    delay(1000);
+    // static AsyncWebServer as_server(81);
+    // delay(1000);
 
-    static AsyncWebSocket ws("/weppsocket");
-    delay(1000);
+    // static AsyncWebSocket ws("/weppsocket");
+    // delay(1000);
 
     Serial.printf("Address of as_server: %p\n", (void*)&as_server);
     Serial.printf("Address of ws: %p\n", (void*)&ws);
