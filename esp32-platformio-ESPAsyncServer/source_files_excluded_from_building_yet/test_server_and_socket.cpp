@@ -278,13 +278,6 @@ void setup() {
     // let everything settle
     delay(1000);
 
-    // create server and socket
-    // static AsyncWebServer as_server(81);
-    // delay(1000);
-
-    // static AsyncWebSocket ws("/weppsocket");
-    // delay(1000);
-
     Serial.printf("Address of as_server: %p\n", (void*)&as_server);
     Serial.printf("Address of ws: %p\n", (void*)&ws);
 

@@ -4,8 +4,8 @@
 #include "ESPAsyncWebServer.h"
 #include "vector"
 #include <Wire.h>
-#include "BH1750.h"
 #include <SPI.h>
+#include "BH1750.h"
 #include "Adafruit_Sensor.h"
 #include "Adafruit_BME280.h"
 

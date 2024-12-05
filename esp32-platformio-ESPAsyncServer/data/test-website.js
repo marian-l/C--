@@ -18,7 +18,7 @@
         console.error("WebSocket error:", error);
     };
 
-    ws_js.onmessage = (event) => {
+    ws.onmessage = (event) => {
         const sensorData = JSON.parse(event.data);
         console.log("Received following data: ", sensorData);
 
