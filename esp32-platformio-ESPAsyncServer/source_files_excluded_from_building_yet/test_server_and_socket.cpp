@@ -239,6 +239,10 @@ void setup() {
     }
     Serial.println("Static IP set.");
 
+    uint32_t lease_time = 600;
+    result = esp_netif_dhcps_option(netif_ap, ESP_NETIF_OP_SET, ESP_NETIF_IP_ADDRESS_LEASE_TIME, &lease_time, sizeof(lease_time));
+    Serial.printf("DHCP option setting result: %d\n", result);
+
     // start DHCP Server
     result = esp_netif_dhcps_start(netif_ap);
     Serial.printf("DHCP-Server-Status code: %d\n", result);
@@ -440,7 +444,7 @@ void notifyClients() {
 }
 
 void loop() {
-    delay(500);
+    delay(5000);
     Serial.println("loop.");
 
     // ws_pt->cleanupClients();
@@ -457,7 +461,7 @@ void loop() {
         if (result != ESP_OK) {
             printf("Failed to get AID for the first station: %s\n", esp_err_to_name(result));
         }
-
+        printf("The mac for the first connected device is: %s\n", sta_list.sta[0].mac);
     printf("The AID for the first station is: %d\n", aid);
     }
 

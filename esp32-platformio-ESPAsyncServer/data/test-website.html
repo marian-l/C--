@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Web Audio API Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            pWiFiEventHandler
+        }
+
+        input[type="range"] {
+            width: 300px;
+            margin: 1em;
+        }
+    </style>
+</head>
+<body>
+<h1>Web Audio API Demo</h1>
+<p>Use the sliders below to adjust the frequency and volume of the tone.</p>
+
+<div>
+    <label for="frequency">Frequency (Hz): <span id="freq-value">440</span></label><br>
+    <input id="frequency" max="2000" min="100" type="range" value="440">
+</div>
+
+<div>
+    <label for="volume">Volume: <span id="vol-value">50</span></label><br>
+    <input id="volume" max="100" min="0" type="range" value="50">
+</div>
+
+<button id="start">Start Tone</button>
+<button id="stop">Stop Tone</button>
+
+<script src="test-website.js"></script>
+</body>
+</html>
