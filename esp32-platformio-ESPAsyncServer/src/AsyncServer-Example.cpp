@@ -64,11 +64,21 @@ void setup() {
     ws.onEvent(onWebSocketEvent);
 }
 
+void notifyClients() {
+    if (ws.count() > 0) {
+        String jsonData = "{\"temperature\": " + String(random(10, 100) / 10.0) +
+                          ", \"humidity\": " + String(random(10, 100) / 10.0) +
+                          ", \"light\": " + String(random(10, 100) / 10.0) + "}";
+
+        ws.textAll(jsonData); // Send data to all connected WebSocket clients
+    }
+}
+
 void loop() {
     delay(5000);
     Serial.println("Beep beep booop.");
 
-
+    notifyClients();
 }
 
 int main() {
