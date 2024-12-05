@@ -1,9 +1,22 @@
 
-    const ws_js = new WebSocket("ws_js://" + location.host + "/");
+    const ws = new WebSocket("ws://192.168.4.1/ws");
 
-    ws_js.onopen = () => {
-        console.log("WebSocket connected");
-    }
+    ws.onopen = function() {
+        console.log("Connected to ESP32 WebSocket");
+        ws.send("Hello from JavaScript!");
+    };
+
+    ws.onmessage = function(event) {
+        console.log("Message from ESP32:", event.data);
+    };
+
+    ws.onclose = function() {
+        console.log("WebSocket connection closed");
+    };
+
+    ws.onerror = function(error) {
+        console.error("WebSocket error:", error);
+    };
 
     ws_js.onmessage = (event) => {
         const sensorData = JSON.parse(event.data);

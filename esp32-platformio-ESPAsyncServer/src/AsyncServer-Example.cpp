@@ -3,6 +3,7 @@
 #include "ESPAsyncWebServer.h"
 #include <Wire.h>
 #include <LittleFS.h>
+#include <SPI.h>
 
 AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
@@ -21,11 +22,31 @@ void handleRoot(AsyncWebServerRequest* request) {
 void setupWebServer() {
     server.serveStatic("/", LittleFS, "/").setDefaultFile("test-website.html");
     server.onNotFound(handleNotFound);
+    server.addHandler(&ws);
+
     server.begin();
 }
 
 void setupWiFiAP() {
     WiFi.softAP(ssid, password);
+}
+
+void onWebSocketMessage(void *arg, uint8_t *data, size_t len) {
+    AwsFrameInfo *info = (AwsFrameInfo*)arg;
+    if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
+        // Echo the message back to the client
+        ws.textAll((char*)data);
+    }
+}
+
+void onWebSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
+    if (type == WS_EVT_CONNECT) {
+        Serial.printf("WebSocket client #%u connected\n", client->id());
+    } else if (type == WS_EVT_DISCONNECT) {
+        Serial.printf("WebSocket client #%u disconnected\n", client->id());
+    } else if (type == WS_EVT_DATA) {
+        onWebSocketMessage(arg, data, len);
+    }
 }
 
 void setup() {
@@ -39,6 +60,8 @@ void setup() {
     }
 
     setupWebServer();
+
+    ws.onEvent(onWebSocketEvent);
 }
 
 void loop() {
