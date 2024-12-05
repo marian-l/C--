@@ -430,12 +430,12 @@ void setup() {
 }
 
 void notifyClients() {
-    if (ws_pt->count() > 0) {
+    if (ws.count() > 0) {
         String jsonData = "{\"temperature\": " + String(random(10, 100) / 10.0) +
                           ", \"humidity\": " + String(random(10, 100) / 10.0) +
                           ", \"light\": " + String(random(10, 100) / 10.0) + "}";
 
-        ws_pt->textAll(jsonData); // Send data to all connected WebSocket clients
+        ws.textAll(jsonData); // Send data to all connected WebSocket clients
     }
 }
 
