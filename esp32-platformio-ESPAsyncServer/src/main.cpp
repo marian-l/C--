@@ -20,20 +20,6 @@ AsyncWebSocket ws("/ws");
 const char* ssid =     "ambient_disco_ap";
 const char* password = "rocking_stone";
 
-// STATES
-enum state {SEND_ALL, SEND_PARTS, SLEEP, IDLE };
-state current_state = SEND_ALL;
-
-// Sensors
-constexpr const char *LIGHT_SENSOR = "LIGHT";
-constexpr const char *PRESSURE_SENSOR = "AIR_PRESSURE";
-constexpr const char *TEMPERATURE_SENSOR = "TEMPERATURE";
-constexpr const char *HUMIDITY_SENSOR = "HUMIDITY";
-constexpr const char *VOLUME_SENSOR = "VOLUME";
-
-const std::vector<String> sensors = {HUMIDITY_SENSOR, LIGHT_SENSOR, PRESSURE_SENSOR, TEMPERATURE_SENSOR, VOLUME_SENSOR};
-std::vector<String>  sending_sensors = {HUMIDITY_SENSOR, LIGHT_SENSOR, PRESSURE_SENSOR, TEMPERATURE_SENSOR, VOLUME_SENSOR};
-
 BH1750 lightSensor;
 Adafruit_BME280 bme280;
 
