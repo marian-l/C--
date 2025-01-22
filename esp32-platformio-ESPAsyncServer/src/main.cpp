@@ -135,11 +135,8 @@ void loop() {
         }
 
         sound = analogRead(analogPin); // Read the analog value
-        // int digitalValue = digitalRead(digitalPin); // Read the digital value
         Serial.print("Analog Value: ");
         Serial.print(sound);
-        // Serial.print(" | Digital Value: ");
-        // Serial.println(digitalValue);
 
         notifyClients();
 
@@ -155,63 +152,5 @@ int main() {
     setup();
     while (true) {
         loop();
-    }
-}
-
-void handleRemoveSensor(uint8_t data) {
-
-}
-
-void handleSleepCommand(uint8_t data) {
-
-}
-
-void setInterval(uint8_t data) {
-
-}
-
-void getStatus() {
-
-}
-
-void onWebSocketMessage(void *arg, uint8_t *data, size_t len) {
-    AwsFrameInfo *info = (AwsFrameInfo*)arg;
-
-    if (len < 2) {
-        Serial.printf("Invalid message length: %d\n", len);
-        ws.textAll("Command with invalid length received.");
-        return;
-    }
-
-    // opcode implies that the websocket expects textual data (ASCII or UTF-8)
-    if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
-        data[len] = 0; // add null-terminator for data to be treated as string-array.
-
-        // data is a pointer to uint8_t, where each byte corresponds to a ACSII-char
-        char main_command = data[0];
-
-        Serial.printf("Received command: %c\n", data[0]);
-
-        // ggf. handleCommand hier implementieren
-        switch (main_command) {
-            case 'r':
-                Serial.printf("Remove sensor: %c\n", data[1]);
-                handleRemoveSensor(data[1]); // pass the sensor to be removed
-                break;
-            case 's':
-                Serial.printf("Sleep for: %d\n", data[1]);
-                handleSleepCommand(data[1]); // minutes of sleep (1 byte -> 15min)
-                break;
-            case 'i':
-                Serial.printf("Setting transmission interval to: every %d minutes", data[1]);
-                setInterval(data[1]);
-                break;
-            case 'z':
-                getStatus(); // z für Zustand
-                break;
-            default:
-                Serial.printf("Unrecognized command: %c \n", main_command);
-                break;
-        }
     }
 }
