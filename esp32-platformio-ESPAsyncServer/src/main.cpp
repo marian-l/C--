@@ -65,16 +65,11 @@ void setup() {
         Serial.printf("Fehler beim Starten des Lichtsensors");
     }
 
-    // BME-Sensor
-    // if(!bme280.init()) {
-    //     Serial.println("BME280 konnte nicht gefunden werden!");
-    // }
-
     pinMode(digitalPin, INPUT);
 
     // Server
-    server.serveStatic("/", LittleFS, "/").setDefaultFile("test-website.html");
-    // server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
+    // server.serveStatic("/", LittleFS, "/").setDefaultFile("test-website.html");
+    server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
     server.onNotFound(handleNotFound);
     server.addHandler(&ws);
     server.begin();
