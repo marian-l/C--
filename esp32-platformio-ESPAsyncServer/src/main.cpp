@@ -56,9 +56,6 @@ void onWebSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsE
         Serial.printf("WebSocket client #%u connected\n", client->id());
     } else if (type == WS_EVT_DISCONNECT) {
         Serial.printf("WebSocket client #%u disconnected\n", client->id());
-    } else if (type == WS_EVT_DATA) {
-        // commands are not needed as the http request will always just ask for the page.
-        // onWebSocketMessage(arg, data, len);
     }
 }
 
