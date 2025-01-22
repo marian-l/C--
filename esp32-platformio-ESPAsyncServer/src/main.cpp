@@ -113,8 +113,7 @@ void loop() {
         }
 
         sound = analogRead(analogPin); // Read the analog value
-        Serial.print("Analog Value: ");
-        Serial.print(sound);
+        Serial.printf("Analog Value: %i", sound);
 
         notifyClients();
 
