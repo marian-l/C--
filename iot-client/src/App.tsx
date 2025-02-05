@@ -1,35 +1,18 @@
-import { createSignal } from 'solid-js'
-import solidLogo from './assets/solid.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import ThemeSwitch from "./components/ThemeSwitch";
+import Dashboard from "./components/Dashboard";
 
 function App() {
-  const [count, setCount] = createSignal(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} class="logo" alt="Vite logo" />
-        </a>
-        <a href="https://solidjs.com" target="_blank">
-          <img src={solidLogo} class="logo solid" alt="Solid logo" />
-        </a>
+    <div class="mx-auto max-w-[800px] flex flex-col gap-4 p-4">
+      <div class="flex w-full relative">
+        <ThemeSwitch />
+        <h1 class="text-5xl w-full text-center">IoT-Ambient-Music</h1>
       </div>
-      <h1>Vite + Solid</h1>
-      <div class="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count()}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p class="read-the-docs">
-        Click on the Vite and Solid logos to learn more
-      </p>
-    </>
-  )
+      {/* <SensorDisplay data={data()} />
+      <AudioController /> */}
+      <Dashboard />
+    </div>
+  );
 }
 
-export default App
+export default App;
