@@ -81,9 +81,9 @@ void setup() {
 void notifyClients() {
     String jsonData = "{\"temperature\": " + String(temperature) +
                       ",\n" + " \"humidity\": " + String(humidity) +
-                      ",\n" + " \"light\": " + String(lux) +
+                      ",\n" + " \"brightness\": " + String(lux) +
                       ",\n" + " \"pressure\": " + String(pressure) +
-                      ",\n" + " \"volume\": " + String(sound) + "}";
+                      ",\n" + " \"noise\": " + String(sound) + "}";
 
     ws.textAll(jsonData); // Send data to all connected WebSocket clients
 }
