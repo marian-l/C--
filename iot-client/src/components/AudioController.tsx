@@ -65,21 +65,22 @@ const quantizeFrequency = (freq: number) => {
 };
 
 
-const mapTempToRootFrequency = (
-  temp: number,
+const mapPressureToRootFrequency = (
+  pressure: number,
   scale: number[],
-  multiplier: number,
+  multiplier: number
 ): number => {
-  const baseline = 23.65;
-  const delta = temp - baseline; 
+  const baseline = 1008;
+  const delta = pressure - baseline;
 
   const amplifiedDelta = delta * multiplier;
 
-  
   const ratio = Math.max(0, Math.min(1, 0.5 + amplifiedDelta));
   if (scale.length < 2) return scale[0];
+
   return scale[0] + (scale[1] - scale[0]) * ratio;
 };
+
 
 interface AudioControllerProps {
   data: SensorData | null;
@@ -166,10 +167,13 @@ const AudioController: Component<AudioControllerProps> = (props) => {
     melodyInterval = setInterval(() => {
       if (!props.data) return;
       const scale = SCALES[selectedScale()] || SCALES["C Pentatonic"];
-      const pressure = (props.data.pressure ?? 1015) - 980;
+      // const pressure = (props.data.pressure ?? 1015) - 980;
+      // const amplifiedPressure = pressure * pressureMultiplier();
+      // const noteIdx = Math.floor((amplifiedPressure / 70) * scale.length) % scale.length;
 
-      const amplifiedPressure = pressure * pressureMultiplier();
-      const noteIdx = Math.floor((amplifiedPressure / 70) * scale.length) % scale.length;
+      const temperature = props.data.temperature ?? 25;
+      const amplifiedTemperature = temperature * tempMultiplier();  
+      const noteIdx = Math.floor((amplifiedTemperature / 10) * scale.length) % scale.length;
       
       triggerMelodyNote(
         ctx,
@@ -254,9 +258,9 @@ const AudioController: Component<AudioControllerProps> = (props) => {
     scale: number[],
     chordOscTypes: OscillatorType[],
   ) => {
-    const { brightness, humidity, temperature } = data;
+    const { brightness, humidity, pressure } = data;
 
-    const rootFreq = mapTempToRootFrequency(temperature, scale, tempMultiplier());
+    const rootFreq = mapPressureToRootFrequency(pressure, scale, pressureMultiplier());  
     const minH = 1;
     const maxH = 100;
     const hRatio =
@@ -511,7 +515,7 @@ const AudioController: Component<AudioControllerProps> = (props) => {
           <span class="w-1/4">Temp Multiplier:</span>
           <input
             type="range"
-            min="0"
+            min="1"
             max="20"
             step="0.05"
             value={tempMultiplier()}
@@ -529,7 +533,7 @@ const AudioController: Component<AudioControllerProps> = (props) => {
           <span class="w-1/4">Humidity Multiplier:</span>
           <input
             type="range"
-            min="0"
+            min="1"
             max="20"
             step="0.1"
             value={humidityMultiplier()}
@@ -547,7 +551,7 @@ const AudioController: Component<AudioControllerProps> = (props) => {
           <span class="w-1/4">Pressure Multiplier:</span>
           <input
             type="range"
-            min="0"
+            min="1"
             max="100"
             step="0.5"
             value={pressureMultiplier()}
