@@ -548,7 +548,7 @@ const AudioController: Component<AudioControllerProps> = (props) => {
           <input
             type="range"
             min="0"
-            max="20"
+            max="100"
             step="0.5"
             value={pressureMultiplier()}
             onInput={(e) =>
