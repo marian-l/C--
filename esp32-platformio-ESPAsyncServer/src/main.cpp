@@ -111,6 +111,8 @@ void loop() {
             Serial.printf("humidity: %f ", humidity);
             Serial.printf("pressure: %f ", pressure);
         }
+        auto test = digitalRead(digitalPin);
+        Serial.printf("\n Digital Value: %i", test);
 
         sound = analogRead(analogPin); // Read the analog value
         Serial.printf("Analog Value: %i", sound);
