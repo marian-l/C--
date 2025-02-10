@@ -54,7 +54,7 @@ const Dashboard: Component = () => {
   });
 
   return (
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+    <div class="flex flex-col gap-4 p-4">
       <SensorDisplay data={sensorData()} />
       <AudioController data={sensorData()} />
     </div>

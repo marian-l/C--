@@ -1,4 +1,4 @@
-import { Component, createSignal, onCleanup } from "solid-js";
+import { Component, createEffect, createSignal, onCleanup } from "solid-js";
 import type { SensorData } from "../data/mockData";
 import Play from "../icons/Play";
 import Stop from "../icons/Stop";
@@ -25,23 +25,6 @@ const BEAT_VARIATIONS: Record<string, string[]> = {
   "Kick HiHat Kick Snare": ["K", "H", "K", "S"],
 };
 
-const createBitcrusherCurve = (bits = 4) => {
-  const samples = 256;
-  const curve = new Float32Array(samples);
-  for (let i = 0; i < samples; i++) {
-    const x = (i / (samples - 1)) * 2 - 1;
-    const steps = Math.pow(2, bits);
-    const quantized = Math.round((x + 1) * (steps / 2)) / (steps / 1) - 1;
-    curve[i] = quantized;
-  }
-  return curve;
-};
-
-const quantizeFrequency = (freq: number) => {
-  const step = 25;
-  return Math.round(freq / step) * step;
-};
-
 const SOUND_PRESETS: Record<
   string,
   { melodyOsc: OscillatorType; chordOscTypes: OscillatorType[] }
@@ -64,9 +47,36 @@ const SOUND_PRESETS: Record<
   },
 };
 
-const mapTempToRootFrequency = (temp: number, scale: number[]): number => {
-  const t = Math.max(0, Math.min(25, temp));
-  const ratio = t / 25;
+const createBitcrusherCurve = (bits = 4) => {
+  const samples = 256;
+  const curve = new Float32Array(samples);
+  for (let i = 0; i < samples; i++) {
+    const x = (i / (samples - 1)) * 2 - 1;
+    const steps = Math.pow(2, bits);
+    const quantized = Math.round((x + 1) * (steps / 2)) / (steps / 1) - 1;
+    curve[i] = quantized;
+  }
+  return curve;
+};
+
+const quantizeFrequency = (freq: number) => {
+  const step = 25;
+  return Math.round(freq / step) * step;
+};
+
+
+const mapTempToRootFrequency = (
+  temp: number,
+  scale: number[],
+  multiplier: number,
+): number => {
+  const baseline = 23.65;
+  const delta = temp - baseline; 
+
+  const amplifiedDelta = delta * multiplier;
+
+  
+  const ratio = Math.max(0, Math.min(1, 0.5 + amplifiedDelta));
   if (scale.length < 2) return scale[0];
   return scale[0] + (scale[1] - scale[0]) * ratio;
 };
@@ -76,24 +86,23 @@ interface AudioControllerProps {
 }
 
 const AudioController: Component<AudioControllerProps> = (props) => {
-  const [audioContext, setAudioContext] = createSignal<AudioContext | null>(
-    null,
-  );
 
+  const [audioContext, setAudioContext] = createSignal<AudioContext | null>(null);
   const [mainGain, setMainGain] = createSignal<GainNode | null>(null);
-  const [melodyChordGain, setMelodyChordGain] = createSignal<GainNode | null>(
-    null,
-  );
+  const [melodyChordGain, setMelodyChordGain] = createSignal<GainNode | null>(null);
   const [beatGain, setBeatGain] = createSignal<GainNode | null>(null);
 
-  const [melodyIntervalTime, setMelodyIntervalTime] = createSignal(1000);
-  const [chordIntervalTime, setChordIntervalTime] = createSignal(2000);
+  const [melodyIntervalTime, setMelodyIntervalTime] = createSignal(250);
+  const [chordIntervalTime, setChordIntervalTime] = createSignal(1000);
   const [bpm, setBpm] = createSignal(120);
-  const [selectedBeatVariation, setSelectedBeatVariation] =
-    createSignal("Kick HiHat");
-
+  const [selectedBeatVariation, setSelectedBeatVariation] = createSignal("Kick HiHat");
   const [selectedScale, setSelectedScale] = createSignal("C Pentatonic");
-  const [selectedPreset, setSelectedPreset] = createSignal("Clean");
+  const [selectedPreset, setSelectedPreset] = createSignal("8-bit");
+
+  const [tempMultiplier, setTempMultiplier] = createSignal(0.05);     
+  const [humidityMultiplier, setHumidityMultiplier] = createSignal(2);  
+  const [pressureMultiplier, setPressureMultiplier] = createSignal(5); 
+  const [brightnessMultiplier, setBrightnessMultiplier] = createSignal(0); 
 
   let melodyInterval: number | undefined;
   let beatInterval: number | undefined;
@@ -109,18 +118,17 @@ const AudioController: Component<AudioControllerProps> = (props) => {
 
       // Main Gain
       const mg = ctx.createGain();
-      mg.gain.value = 1; // Volume
+      mg.gain.value = 1;
 
       // Melody/Chord Gain
       const mcg = ctx.createGain();
-      mcg.gain.value = 0.4; // Volume
+      mcg.gain.value = 0.4;
 
       // Beat Gain
       const bg = ctx.createGain();
-      bg.gain.value = 0.5; // Volume
+      bg.gain.value = 0.5;
 
       if (selectedPreset() === "8-bit") {
-        // Bit crusher
         const bitcrusher = ctx.createWaveShaper();
         bitcrusher.curve = createBitcrusherCurve(4);
         bitcrusher.oversample = "none";
@@ -129,7 +137,6 @@ const AudioController: Component<AudioControllerProps> = (props) => {
         bg.connect(mg);
         mg.connect(ctx.destination);
       } else {
-        // No bit crusher
         mcg.connect(mg);
         bg.connect(mg);
         mg.connect(ctx.destination);
@@ -160,7 +167,8 @@ const AudioController: Component<AudioControllerProps> = (props) => {
       if (!props.data) return;
       const scale = SCALES[selectedScale()] || SCALES["C Pentatonic"];
       const pressure = (props.data.pressure ?? 1015) - 980;
-      const amplifiedPressure = pressure * 1.5;
+
+      const amplifiedPressure = pressure * pressureMultiplier();
       const noteIdx = Math.floor((amplifiedPressure / 70) * scale.length) % scale.length;
       
       triggerMelodyNote(
@@ -174,14 +182,9 @@ const AudioController: Component<AudioControllerProps> = (props) => {
     chordInterval = setInterval(() => {
       if (!props.data) return;
       const scale = SCALES[selectedScale()] || SCALES["C Pentatonic"];
-      triggerChord(
-        ctx,
-        mcg,
-        props.data,
-        scale,
-        SOUND_PRESETS[selectedPreset()].chordOscTypes,
-      );
+      triggerChord(ctx, mcg, props.data, scale, SOUND_PRESETS[selectedPreset()].chordOscTypes);
     }, chordIntervalTime());
+    
 
     const pattern =
       BEAT_VARIATIONS[selectedBeatVariation()] || BEAT_VARIATIONS["Kick HiHat"];
@@ -236,7 +239,6 @@ const AudioController: Component<AudioControllerProps> = (props) => {
     g.gain.linearRampToValueAtTime(0.3, now + 0.05);
 
     if (selectedPreset() === "8-bit") {
-      //Short sounds for 8-bit with little release
       g.gain.linearRampToValueAtTime(0.0, now + 0.25);
       osc.stop(now + 0.3);
     } else {
@@ -254,13 +256,14 @@ const AudioController: Component<AudioControllerProps> = (props) => {
   ) => {
     const { brightness, humidity, temperature } = data;
 
-    const rootFreq = mapTempToRootFrequency(temperature, scale);
-    const minH = 40;
-    const maxH = 80;
+    const rootFreq = mapTempToRootFrequency(temperature, scale, tempMultiplier());
+    const minH = 1;
+    const maxH = 100;
     const hRatio =
       (Math.min(Math.max(humidity, minH), maxH) - minH) / (maxH - minH);
+    const amplifiedHRatio = Math.max(0, Math.min(1, hRatio * humidityMultiplier()));
     const chordIndex =
-      Math.floor(hRatio * CHORD_VOICINGS.length) % CHORD_VOICINGS.length;
+      Math.floor(amplifiedHRatio * CHORD_VOICINGS.length) % CHORD_VOICINGS.length;
     const voicing = CHORD_VOICINGS[chordIndex];
 
     const notes = voicing.map((i, idx) => {
@@ -271,7 +274,7 @@ const AudioController: Component<AudioControllerProps> = (props) => {
       return f;
     });
 
-    let chordGain = 0.1 + ((brightness || 0) / 1000) * 0.5;
+    let chordGain = 0.1 + ((brightness || 0) / 1000) * brightnessMultiplier();
 
     const now = ctx.currentTime;
 
@@ -286,7 +289,6 @@ const AudioController: Component<AudioControllerProps> = (props) => {
       osc.connect(g).connect(mcg);
 
       if (selectedPreset() === "8-bit") {
-        //Short sounds for 8-bit with little release
         g.gain.linearRampToValueAtTime(chordGain, now + 0.05);
         g.gain.linearRampToValueAtTime(0.0, now + 0.15);
         osc.start(now);
@@ -381,17 +383,33 @@ const AudioController: Component<AudioControllerProps> = (props) => {
     source.stop(ctx.currentTime + 0.3);
   };
 
+  createEffect(() => {
+    if (!audioContext() || !mainGain() || !props.data) return;
+  
+    const noiseValue = props.data.noise ?? 0;
+  
+    const clampedNoise = Math.min(Math.max(noiseValue, 0), 100);
+  
+    const minGain = 0.5;
+    const maxGain = 1.5;
+    const ratio = clampedNoise / 100;
+    const newGainValue = minGain + ratio * (maxGain - minGain);
+  
+    mainGain()!.gain.value = newGainValue;
+  });
+
   return (
     <div class="flex flex-col gap-4 bg-neutral-300 dark:bg-neutral-700 p-4 rounded">
       <h2 class="text-3xl w-full text-center pb-2 border-b-2 border-neutral-100">
         Audio Controller
       </h2>
+
       <div>
         <label class="flex gap-2 w-full items-center">
           <span class="w-1/4">Melody Interval (ms):</span>
           <input
             type="number"
-            class="rounded p-2 ring-1 ring-neutral-800 w-full bg-neutral-100 dark:bg-neutral-500 dark:ring-neutral-100 disabled:opacity-50"
+            class="rounded p-2 ring-1 ring-neutral-800 w-full bg-neutral-100 dark:bg-neutral-500 dark:ring-neutral-100"
             value={melodyIntervalTime()}
             disabled={audioContext() ? true : false}
             onInput={(e) => {
@@ -407,7 +425,7 @@ const AudioController: Component<AudioControllerProps> = (props) => {
           <span class="w-1/4">Chord Interval (ms):</span>
           <input
             type="number"
-            class="rounded p-2 ring-1 ring-neutral-800 w-full bg-neutral-100 dark:bg-neutral-500 dark:ring-neutral-100 disabled:opacity-50"
+            class="rounded p-2 ring-1 ring-neutral-800 w-full bg-neutral-100 dark:bg-neutral-500 dark:ring-neutral-100"
             value={chordIntervalTime()}
             disabled={audioContext() ? true : false}
             onInput={(e) => {
@@ -423,7 +441,7 @@ const AudioController: Component<AudioControllerProps> = (props) => {
           <span class="w-1/4">BPM:</span>
           <input
             type="number"
-            class="rounded p-2 ring-1 ring-neutral-800 w-full bg-neutral-100 dark:bg-neutral-500 dark:ring-neutral-100 disabled:opacity-50"
+            class="rounded p-2 ring-1 ring-neutral-800 w-full bg-neutral-100 dark:bg-neutral-500 dark:ring-neutral-100"
             value={bpm()}
             disabled={audioContext() ? true : false}
             onInput={(e) => {
@@ -438,7 +456,7 @@ const AudioController: Component<AudioControllerProps> = (props) => {
         <label class="flex gap-2 w-full items-center">
           <span class="w-1/4">Beat Variation:</span>
           <select
-            class="rounded p-2 ring-1 ring-neutral-800 appearance-none w-full cursor-pointer bg-neutral-100 dark:bg-neutral-500 dark:ring-neutral-100 disabled:opacity-50"
+            class="rounded p-2 ring-1 ring-neutral-800 appearance-none w-full cursor-pointer bg-neutral-100 dark:bg-neutral-500 dark:ring-neutral-100"
             disabled={audioContext() ? true : false}
             value={selectedBeatVariation()}
             onInput={(e) =>
@@ -456,7 +474,7 @@ const AudioController: Component<AudioControllerProps> = (props) => {
         <label class="flex gap-2 w-full items-center">
           <span class="w-1/4">Key:</span>
           <select
-            class="rounded p-2 ring-1 ring-neutral-800 appearance-none w-full cursor-pointer bg-neutral-100 dark:bg-neutral-500 dark:ring-neutral-100 disabled:opacity-50"
+            class="rounded p-2 ring-1 ring-neutral-800 appearance-none w-full cursor-pointer bg-neutral-100 dark:bg-neutral-500 dark:ring-neutral-100"
             disabled={audioContext() ? true : false}
             value={selectedScale()}
             onInput={(e) =>
@@ -474,7 +492,7 @@ const AudioController: Component<AudioControllerProps> = (props) => {
         <label class="flex gap-2 w-full items-center">
           <span class="w-1/4">Sound-Design:</span>
           <select
-            class="rounded p-2 ring-1 ring-neutral-800 appearance-none w-full cursor-pointer bg-neutral-100 dark:bg-neutral-500 dark:ring-neutral-100 disabled:opacity-50"
+            class="rounded p-2 ring-1 ring-neutral-800 appearance-none w-full cursor-pointer bg-neutral-100 dark:bg-neutral-500 dark:ring-neutral-100"
             disabled={audioContext() ? true : false}
             value={selectedPreset()}
             onInput={(e) =>
@@ -487,6 +505,79 @@ const AudioController: Component<AudioControllerProps> = (props) => {
           </select>
         </label>
       </div>
+
+      <div>
+        <label class="flex gap-2 w-full items-center">
+          <span class="w-1/4">Temp Multiplier:</span>
+          <input
+            type="range"
+            min="0"
+            max="20"
+            step="0.05"
+            value={tempMultiplier()}
+            onInput={(e) =>
+              setTempMultiplier(parseFloat((e.target as HTMLInputElement).value))
+            }
+            class="w-full"
+          />
+          <span>{tempMultiplier()}</span>
+        </label>
+      </div>
+
+      <div>
+        <label class="flex gap-2 w-full items-center">
+          <span class="w-1/4">Humidity Multiplier:</span>
+          <input
+            type="range"
+            min="0"
+            max="20"
+            step="0.1"
+            value={humidityMultiplier()}
+            onInput={(e) =>
+              setHumidityMultiplier(parseFloat((e.target as HTMLInputElement).value))
+            }
+            class="w-full"
+          />
+          <span>{humidityMultiplier()}</span>
+        </label>
+      </div>
+
+      <div>
+        <label class="flex gap-2 w-full items-center">
+          <span class="w-1/4">Pressure Multiplier:</span>
+          <input
+            type="range"
+            min="0"
+            max="20"
+            step="0.5"
+            value={pressureMultiplier()}
+            onInput={(e) =>
+              setPressureMultiplier(parseFloat((e.target as HTMLInputElement).value))
+            }
+            class="w-full"
+          />
+          <span>{pressureMultiplier()}</span>
+        </label>
+      </div>
+
+      <div>
+        <label class="flex gap-2 w-full items-center">
+          <span class="w-1/4">Brightness Multiplier:</span>
+          <input
+            type="range"
+            min="0"
+            max="0.1"
+            step="0.005"
+            value={brightnessMultiplier()}
+            onInput={(e) =>
+              setBrightnessMultiplier(parseFloat((e.target as HTMLInputElement).value))
+            }
+            class="w-full"
+          />
+          <span>{brightnessMultiplier()}</span>
+        </label>
+      </div>
+
       <div class="flex justify-center">
         {!audioContext() && (
           <button
