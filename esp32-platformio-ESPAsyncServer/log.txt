@@ -1,0 +1,899 @@
+C:\Users\maria\.platformio\penv\Scripts\pio run -t upload -t monitor -e esp32dev
+Processing esp32dev (platform: espressif32 @6.9.0; board: esp32dev; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+PLATFORM: Espressif 32 (6.9.0) > Espressif ESP32 Dev Module
+HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES:
+ - framework-arduinoespressif32 @ 3.20017.0 (2.0.17)
+ - tool-esptoolpy @ 1.40501.0 (4.5.1)
+ - tool-mkfatfs @ 2.0.1
+ - tool-mklittlefs @ 1.203.210628 (2.3)
+ - tool-mkspiffs @ 2.230.0 (2.30)
+ - toolchain-xtensa-esp32 @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 39 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- ESP Async WebServer @ 1.2.4+sha.67de9cd
+|-- AsyncTCP @ 1.1.1
+|-- BH1750 @ 1.3.0
+|-- Adafruit BME280 Library @ 2.2.4
+|-- Adafruit Unified Sensor @ 1.1.14
+|-- Adafruit BusIO @ 1.16.2
+|-- LittleFS @ 2.0.0
+|-- SPI @ 2.0.0
+|-- WiFi @ 2.0.0
+|-- Wire @ 2.0.0
+Building in release mode
+Retrieving maximum program size .pio\build\esp32dev\firmware.elf
+Checking size .pio\build\esp32dev\firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [=         ]  13.7% (used 44744 bytes from 327680 bytes)
+Flash: [=======   ]  68.1% (used 892701 bytes from 1310720 bytes)
+Configuring upload protocol...
+AVAILABLE: cmsis-dap, esp-bridge, esp-prog, espota, esptool, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa
+CURRENT: upload_protocol = esptool
+Looking for upload port...
+Auto-detected: COM3
+Uploading .pio\build\esp32dev\firmware.bin
+esptool.py v4.5.1
+Serial port COM3
+Connecting.......
+Chip is ESP32-D0WDQ6-V3 (revision v3.0)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: 78:21:84:9a:49:30
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00001000 to 0x00005fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+Flash will be erased from 0x0000e000 to 0x0000ffff...
+Flash will be erased from 0x00010000 to 0x000ebfff...
+Compressed 17536 bytes to 12202...
+Writing at 0x00001000... (100 %)
+Wrote 17536 bytes (12202 compressed) at 0x00001000 in 0.6 seconds (effective 240.6 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 146...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (146 compressed) at 0x00008000 in 0.1 seconds (effective 195.8 kbit/s)...
+Hash of data verified.
+Compressed 8192 bytes to 47...
+Writing at 0x0000e000... (100 %)
+Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (effective 486.2 kbit/s)...
+Hash of data verified.
+Compressed 899280 bytes to 569365...
+Writing at 0x00010000... (2 %)
+Writing at 0x0001c5d7... (5 %)
+Writing at 0x0002709f... (8 %)
+Writing at 0x0003680f... (11 %)
+Writing at 0x0003e198... (14 %)
+Writing at 0x000441c2... (17 %)
+Writing at 0x00049e22... (20 %)
+Writing at 0x0004fd2b... (22 %)
+Writing at 0x000555e6... (25 %)
+Writing at 0x0005adc4... (28 %)
+Writing at 0x0006076e... (31 %)
+Writing at 0x000659fa... (34 %)
+Writing at 0x0006ae81... (37 %)
+Writing at 0x00070069... (40 %)
+Writing at 0x0007539b... (42 %)
+Writing at 0x0007a6b5... (45 %)
+Writing at 0x0007fc26... (48 %)
+Writing at 0x00084b16... (51 %)
+Writing at 0x00089ea4... (54 %)
+Writing at 0x0008f279... (57 %)
+Writing at 0x00094ef9... (60 %)
+Writing at 0x0009a514... (62 %)
+Writing at 0x0009f7ae... (65 %)
+Writing at 0x000a4bd2... (68 %)
+Writing at 0x000a9fda... (71 %)
+Writing at 0x000af69a... (74 %)
+Writing at 0x000b4fe1... (77 %)
+Writing at 0x000badbb... (80 %)
+Writing at 0x000c0688... (82 %)
+Writing at 0x000c62fd... (85 %)
+Writing at 0x000ce897... (88 %)
+Writing at 0x000d70bb... (91 %)
+Writing at 0x000dc1da... (94 %)
+Writing at 0x000e1d16... (97 %)
+Writing at 0x000e72bb... (100 %)
+Wrote 899280 bytes (569365 compressed) at 0x00010000 in 15.1 seconds (effective 475.8 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...
+--- Terminal on COM3 | 115200 8-N-1
+--- Available filters and text transformations: colorize, debug, default, direct, esp32_exception_decoder, hexlify, log2file, nocontrol, printable, send_on_enter, time
+--- More details at https://bit.ly/pio-monitor-filters
+--- Quit: Ctrl+C | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
+[    25][D][esp32-hal-cpu.c:244] setCpuFrequencyMhz(): PLL: 480 / 2 = 240 Mhz, APB: 80000000 Hz
+[    50][V][esp32-hal-uart.c:330] uartBegin(): UART0 baud(115200) Mode(800001c) rxPin(3) txPin(1)
+[    60][V][esp32-hal-uart.c:416] uartBegin(): UART0 not installed. Starting installation
+[    71][V][esp32-hal-uart.c:463] uartBegin(): UART0 initialization done.
+[    99][D][WiFiGeneric.cpp:1040] _eventCallback(): Arduino Event: 0 - WIFI_READY
+[   187][V][WiFiGeneric.cpp:393] _arduino_event_cb(): AP Started
+[   192][I][esp32-hal-i2c.c:75] i2cInit(): Initialising I2C Master: sda=21 scl=22 freq=100000
+[   202][D][WiFiGeneric.cpp:1040] _eventCallback(): Arduino Event: 10 - AP_START
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0Beep beep booop.
+WS-Connections: 0[104372][V][WiFiGeneric.cpp:408] _arduino_event_cb(): AP Station Connected: MAC: 56:63:2e:bf:e0:7d, AID: 1
+[104382][D][WiFiGeneric.cpp:1040] _eventCallback(): Arduino Event: 12 - AP_STACONNECTED
+[104539][V][WiFiGeneric.cpp:422] _arduino_event_cb(): AP Station IP Assigned:192.168.4.2
+[104547][D][WiFiGeneric.cpp:1040] _eventCallback(): Arduino Event: 14 - AP_STAIPASSIGNED
+Beep beep booop.
+WS-Connections: 0WebSocket client #1 connected
+Beep beep booop.
+WS-Connections: 1Free heap: 229632 bytes
+lux: 7.500000 [110237][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.889999 humidity: 28.324219 pressure: 1008.714233
+ Digital Value: 0Analog Value: 1056Beep beep booop.
+WS-Connections: 1Free heap: 229044 bytes
+lux: 6.666667 [111380][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.120001 humidity: 28.280273 pressure: 1008.725952
+ Digital Value: 0Analog Value: 534Beep beep booop.
+WS-Connections: 1Free heap: 229040 bytes
+lux: 5.833333 [112524][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.129999 humidity: 28.245117 pressure: 1008.718994
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 229036 bytes
+lux: 5.833333 [113669][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.129999 humidity: 28.528320 pressure: 1008.750732
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 229048 bytes
+lux: 5.833333 [114813][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.120001 humidity: 28.398438 pressure: 1008.736145
+ Digital Value: 0Analog Value: 150Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.833333 [115958][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.139999 humidity: 28.339844 pressure: 1008.742004
+ Digital Value: 0Analog Value: 732Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.833333 [117102][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.139999 humidity: 28.352539 pressure: 1008.759827
+ Digital Value: 0Analog Value: 292Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.833333 [118246][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.139999 humidity: 28.624023 pressure: 1008.742798
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 5.833333 [119390][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.139999 humidity: 28.872070 pressure: 1008.729126
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228960 bytes
+lux: 5.833333 [120534][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.150000 humidity: 29.025391 pressure: 1008.770935
+ Digital Value: 0Analog Value: 233Beep beep booop.
+WS-Connections: 1Free heap: 228936 bytes
+lux: 5.833333 [121678][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.139999 humidity: 28.942383 pressure: 1008.747864
+ Digital Value: 0Analog Value: 751Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.833333 [122822][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.139999 humidity: 28.930664 pressure: 1008.750549
+ Digital Value: 0Analog Value: 368Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 5.833333 [123967][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.120001 humidity: 28.764648 pressure: 1008.750793
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 5.833333 [125111][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.120001 humidity: 28.681641 pressure: 1008.745605
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.833333 [126255][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.110001 humidity: 28.562500 pressure: 1008.709839
+ Digital Value: 0Analog Value: 242Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 6.666667 [127399][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.090000 humidity: 28.538086 pressure: 1008.760498
+ Digital Value: 0Analog Value: 752Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 6.666667 [128543][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.080000 humidity: 28.560547 pressure: 1008.738342
+ Digital Value: 0Analog Value: 387Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 6.666667 [129687][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.070000 humidity: 28.583984 pressure: 1008.741943
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228960 bytes
+lux: 5.833333 [130831][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 28.665039 pressure: 1008.735168
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228936 bytes
+lux: 5.833333 [131975][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 28.889648 pressure: 1008.743774
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228960 bytes
+lux: 5.000000 [133119][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.049999 humidity: 29.007812 pressure: 1008.759216
+ Digital Value: 0Analog Value: 745Beep beep booop.
+WS-Connections: 1Free heap: 228936 bytes
+lux: 5.000000 [134264][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.049999 humidity: 28.995117 pressure: 1008.722473
+ Digital Value: 0Analog Value: 441Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.000000 [135408][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 29.066406 pressure: 1008.765930
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 4.166667 [136552][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.049999 humidity: 29.183594 pressure: 1008.744690
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 4.166667 [137696][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 31.945312 pressure: 1008.770142
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 4.166667 [138841][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.070000 humidity: 32.263672 pressure: 1008.740173
+ Digital Value: 0Analog Value: 688Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 4.166667 [139984][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 31.308594 pressure: 1008.735168
+ Digital Value: 0Analog Value: 630Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 2.500000 [141128][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.070000 humidity: 33.018555 pressure: 1008.721436
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 4.166667 [142272][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.100000 humidity: 35.388672 pressure: 1008.753540
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228952 bytes
+lux: 5.000000 [143416][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.090000 humidity: 34.175781 pressure: 1008.721069
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228944 bytes
+lux: 5.000000 [144560][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 31.579102 pressure: 1008.730957
+ Digital Value: 0Analog Value: 550Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 4.166667 [145704][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.040001 humidity: 30.563477 pressure: 1008.750793
+ Digital Value: 0Analog Value: 630Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 5.000000 [146848][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.030001 humidity: 30.432617 pressure: 1008.741577
+ Digital Value: 0Analog Value: 41Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.000000 [147992][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.040001 humidity: 30.398438 pressure: 1008.738831
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 5.000000 [149136][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.030001 humidity: 30.114258 pressure: 1008.721863
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228960 bytes
+lux: 5.000000 [150280][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.040001 humidity: 30.033203 pressure: 1008.739685
+ Digital Value: 0Analog Value: 543Beep beep booop.
+WS-Connections: 1Free heap: 228936 bytes
+lux: 5.000000 [151424][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.040001 humidity: 29.891602 pressure: 1008.719238
+ Digital Value: 0Analog Value: 658Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 5.000000 [152569][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 29.833008 pressure: 1008.737793
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228960 bytes
+lux: 5.000000 [153713][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 29.787109 pressure: 1008.724854
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228936 bytes
+lux: 5.000000 [154857][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 29.515625 pressure: 1008.699280
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228960 bytes
+lux: 5.000000 [156001][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 29.291016 pressure: 1008.712952
+ Digital Value: 0Analog Value: 762Beep beep booop.
+WS-Connections: 1Free heap: 228936 bytes
+lux: 5.000000 [157145][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.070000 humidity: 29.208984 pressure: 1008.730835
+ Digital Value: 0Analog Value: 426Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.000000 [158289][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 29.101562 pressure: 1008.703613
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 5.000000 [159433][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 29.079102 pressure: 1008.731689
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 5.833333 [160577][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 29.067383 pressure: 1008.695862
+ Digital Value: 0Analog Value: 208Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.000000 [161721][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.070000 humidity: 29.303711 pressure: 1008.721436
+ Digital Value: 0Analog Value: 722Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.000000 [162865][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.070000 humidity: 29.633789 pressure: 1008.724854
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.000000 [164009][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.070000 humidity: 29.468750 pressure: 1008.721436
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 5.000000 [165153][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.070000 humidity: 29.032227 pressure: 1008.712891
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228960 bytes
+lux: 5.000000 [166297][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.049999 humidity: 29.714844 pressure: 1008.681458
+ Digital Value: 0Analog Value: 546Beep beep booop.
+WS-Connections: 1Free heap: 228936 bytes
+lux: 5.833333 [167441][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.030001 humidity: 29.843750 pressure: 1008.708130
+ Digital Value: 0Analog Value: 663Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 6.666667 [168585][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.030001 humidity: 29.843750 pressure: 1008.755127
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 6.666667 [169729][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.040001 humidity: 29.903320 pressure: 1008.736267
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 6.666667 [170873][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.040001 humidity: 29.915039 pressure: 1008.733765
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 6.666667 [172018][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.040001 humidity: 29.703125 pressure: 1008.710632
+ Digital Value: 0Analog Value: 738Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 6.666667 [173161][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.049999 humidity: 29.596680 pressure: 1008.696899
+ Digital Value: 0Analog Value: 526Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 6.666667 [174305][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.049999 humidity: 29.408203 pressure: 1008.727600
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 6.666667 [175449][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.049999 humidity: 29.207031 pressure: 1008.722473
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228952 bytes
+lux: 6.666667 [176593][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.049999 humidity: 29.148438 pressure: 1008.716553
+ Digital Value: 0Analog Value: 15Beep beep booop.
+WS-Connections: 1Free heap: 228944 bytes
+lux: 6.666667 [177738][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.049999 humidity: 29.018555 pressure: 1008.707092
+ Digital Value: 0Analog Value: 739Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 6.666667 [178881][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 28.948242 pressure: 1008.724121
+ Digital Value: 0Analog Value: 402Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 5.833333 [180025][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 28.959961 pressure: 1008.701904
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 5.000000 [181169][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 28.924805 pressure: 1008.716431
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.000000 [182313][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 28.925781 pressure: 1008.720642
+ Digital Value: 0Analog Value: 62Beep beep booop.
+WS-Connections: 1Free heap: 228960 bytes
+lux: 5.000000 [183457][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.059999 humidity: 29.019531 pressure: 1008.714661
+ Digital Value: 0Analog Value: 738Beep beep booop.
+WS-Connections: 1Free heap: 228936 bytes
+lux: 5.000000 [184601][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.040001 humidity: 29.053711 pressure: 1008.714844
+ Digital Value: 0Analog Value: 431Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.000000 [185745][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.040001 humidity: 29.041992 pressure: 1008.714905
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.000000 [186889][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.030001 humidity: 28.982422 pressure: 1008.716736
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.000000 [188033][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.010000 humidity: 29.181641 pressure: 1008.735718
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 5.833333 [189177][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.010000 humidity: 29.381836 pressure: 1008.738342
+ Digital Value: 0Analog Value: 735Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 5.000000 [190322][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.010000 humidity: 29.417969 pressure: 1008.738281
+ Digital Value: 0Analog Value: 408Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 5.000000 [191466][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.000000 humidity: 29.405273 pressure: 1008.704224
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 6.666667 [192610][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.000000 humidity: 29.357422 pressure: 1008.716248
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228960 bytes
+lux: 7.500000 [193754][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.990000 humidity: 29.439453 pressure: 1008.729065
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228936 bytes
+lux: 9.166666 [194898][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.000000 humidity: 29.487305 pressure: 1008.721436
+ Digital Value: 0Analog Value: 774Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 9.166666 [196042][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.990000 humidity: 29.487305 pressure: 1008.722168
+ Digital Value: 0Analog Value: 65Beep beep booop.
+WS-Connections: 1Free heap: 228960 bytes
+lux: 10.000000 [197186][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 24.000000 humidity: 29.333984 pressure: 1008.747803
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228936 bytes
+lux: 10.000000 [198330][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.990000 humidity: 29.204102 pressure: 1008.720642
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228960 bytes
+lux: 10.000000 [199474][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.990000 humidity: 29.132812 pressure: 1008.750488
+ Digital Value: 0Analog Value: 35Beep beep booop.
+WS-Connections: 1Free heap: 228936 bytes
+lux: 10.000000 [200618][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.990000 humidity: 29.085938 pressure: 1008.738525
+ Digital Value: 0Analog Value: 765Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 10.000000 [201762][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.990000 humidity: 29.015625 pressure: 1008.730835
+ Digital Value: 0Analog Value: 394Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 10.000000 [202906][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.980000 humidity: 29.013672 pressure: 1008.722351
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 10.000000 [204050][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.969999 humidity: 29.001953 pressure: 1008.719849
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [205194][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.969999 humidity: 28.978516 pressure: 1008.742981
+ Digital Value: 0Analog Value: 304Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 10.000000 [206338][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.980000 humidity: 28.955078 pressure: 1008.730103
+ Digital Value: 0Analog Value: 721Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 10.000000 [207483][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.980000 humidity: 28.955078 pressure: 1008.748047
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [208627][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.969999 humidity: 28.965820 pressure: 1008.722473
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228960 bytes
+lux: 10.000000 [209772][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.969999 humidity: 28.942383 pressure: 1008.729370
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228936 bytes
+lux: 10.000000 [210917][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.959999 humidity: 28.895508 pressure: 1008.728516
+ Digital Value: 0Analog Value: 738Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [212061][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.959999 humidity: 28.883789 pressure: 1008.722473
+ Digital Value: 0Analog Value: 285Beep beep booop.
+WS-Connections: 1Free heap: 228700 bytes
+lux: 10.000000 [213206][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.959999 humidity: 28.918945 pressure: 1008.732056
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [214350][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.959999 humidity: 28.930664 pressure: 1008.723450
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 10.000000 [215494][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.959999 humidity: 28.954102 pressure: 1008.711548
+ Digital Value: 0Analog Value: 598Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [216641][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.950001 humidity: 28.976562 pressure: 1008.702209
+ Digital Value: 0Analog Value: 186Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 10.000000 [217785][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.940001 humidity: 28.976562 pressure: 1008.725342
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [218929][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.940001 humidity: 28.941406 pressure: 1008.730469
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 10.000000 [220074][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.930000 humidity: 28.952148 pressure: 1008.719543
+ Digital Value: 0Analog Value: 671Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [221219][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.930000 humidity: 28.975586 pressure: 1008.747681
+ Digital Value: 0Analog Value: 435Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 10.000000 [222364][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.920000 humidity: 28.999023 pressure: 1008.735779
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 10.000000 [223508][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.910000 humidity: 29.021484 pressure: 1008.692627
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 10.000000 [224652][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.900000 humidity: 29.008789 pressure: 1008.732971
+ Digital Value: 0Analog Value: 396Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 10.000000 [225797][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.879999 humidity: 29.020508 pressure: 1008.708374
+ Digital Value: 0Analog Value: 595Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 10.000000 [226942][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.879999 humidity: 29.042969 pressure: 1008.695618
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [228087][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.879999 humidity: 29.054688 pressure: 1008.710144
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 10.000000 [229231][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.879999 humidity: 29.054688 pressure: 1008.713501
+ Digital Value: 0Analog Value: 478Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [230375][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.879999 humidity: 29.066406 pressure: 1008.721191
+ Digital Value: 0Analog Value: 382Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [231519][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.870001 humidity: 29.078125 pressure: 1008.716064
+ Digital Value: 0Analog Value: 35Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 10.000000 [232663][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.870001 humidity: 29.078125 pressure: 1008.716187
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [233807][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.870001 humidity: 29.089844 pressure: 1008.693970
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 10.000000 [234952][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.860001 humidity: 29.078125 pressure: 1008.692322
+ Digital Value: 0Analog Value: 691Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [236097][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.860001 humidity: 29.088867 pressure: 1008.694092
+ Digital Value: 0Analog Value: 317Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 10.000000 [237241][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.850000 humidity: 29.100586 pressure: 1008.687317
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228952 bytes
+lux: 10.000000 [238385][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.840000 humidity: 29.111328 pressure: 1008.695129
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228944 bytes
+lux: 10.000000 [239530][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.830000 humidity: 29.123047 pressure: 1008.693420
+ Digital Value: 0Analog Value: 400Beep beep booop.
+WS-Connections: 1Free heap: 228940 bytes
+lux: 10.000000 [240674][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.820000 humidity: 29.145508 pressure: 1008.679077
+ Digital Value: 0Analog Value: 699Beep beep booop.
+WS-Connections: 1Free heap: 228956 bytes
+lux: 10.000000 [241818][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.820000 humidity: 29.168945 pressure: 1008.711548
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228948 bytes
+lux: 10.000000 [242963][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.820000 humidity: 29.181641 pressure: 1008.726074
+ Digital Value: 0Analog Value: 0[243958][V][WiFiGeneric.cpp:415] _arduino_event_cb(): AP Station Disconnected: MAC: 56:63:2e:bf:e0:7d, AID: 1
+[243969][D][WiFiGeneric.cpp:1040] _eventCallback(): Arduino Event: 13 - AP_STADISCONNECTED
+Beep beep booop.
+WS-Connections: 1Free heap: 230968 bytes
+lux: 10.000000 [244109][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.809999 humidity: 29.204102 pressure: 1008.713257
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 229308 bytes
+lux: 10.000000 [245252][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.809999 humidity: 29.215820 pressure: 1008.699707
+ Digital Value: 0Analog Value: 752Beep beep booop.
+WS-Connections: 1Free heap: 229048 bytes
+lux: 10.000000 [246394][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.799999 humidity: 29.214844 pressure: 1008.692017
+ Digital Value: 0Analog Value: 719Beep beep booop.
+WS-Connections: 1Free heap: 228788 bytes
+lux: 10.000000 [247536][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.790001 humidity: 29.202148 pressure: 1008.708435
+ Digital Value: 0Analog Value: 546Beep beep booop.
+WS-Connections: 1Free heap: 228516 bytes
+lux: 10.000000 [248678][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.780001 humidity: 29.190430 pressure: 1008.710999
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228268 bytes
+lux: 10.000000 [249820][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.780001 humidity: 29.202148 pressure: 1008.696533
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 228020 bytes
+lux: 10.000000 [250962][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.770000 humidity: 29.212891 pressure: 1008.669373
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 227772 bytes
+lux: 10.000000 [252104][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.760000 humidity: 29.224609 pressure: 1008.681396
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 227524 bytes
+lux: 10.000000 [253246][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.750000 humidity: 29.223633 pressure: 1008.664368
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 227276 bytes
+lux: 10.000000 [254388][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.750000 humidity: 29.222656 pressure: 1008.645630
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 227004 bytes
+lux: 10.000000 [255530][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.740000 humidity: 29.234375 pressure: 1008.648254
+ Digital Value: 0Analog Value: 230Beep beep booop.
+WS-Connections: 1Free heap: 226752 bytes
+lux: 10.000000 [256672][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.730000 humidity: 29.233398 pressure: 1008.669678
+ Digital Value: 0Analog Value: 688Beep beep booop.
+WS-Connections: 1Free heap: 226500 bytes
+lux: 10.000000 [257814][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.709999 humidity: 29.232422 pressure: 1008.663025
+ Digital Value: 0Analog Value: 729Beep beep booop.
+WS-Connections: 1Free heap: 226248 bytes
+lux: 10.000000 [258956][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.709999 humidity: 29.245117 pressure: 1008.667358
+ Digital Value: 0Analog Value: 619Beep beep booop.
+WS-Connections: 1Free heap: 225996 bytes
+lux: 10.000000 [260098][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.700001 humidity: 29.267578 pressure: 1008.629089
+ Digital Value: 0Analog Value: 346Beep beep booop.
+WS-Connections: 1Free heap: 225744 bytes
+lux: 10.000000 [261240][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.700001 humidity: 29.291016 pressure: 1008.654602
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 225496 bytes
+lux: 10.000000 [262382][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.700001 humidity: 29.291016 pressure: 1008.659790
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 225248 bytes
+lux: 10.000000 [263524][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.680000 humidity: 29.290039 pressure: 1008.644531
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 225000 bytes
+lux: 10.000000 [264666][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.680000 humidity: 29.301758 pressure: 1008.654846
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 224740 bytes
+lux: 10.000000 [265808][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.680000 humidity: 29.301758 pressure: 1008.630005
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 224480 bytes
+lux: 10.000000 [266950][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.680000 humidity: 29.313477 pressure: 1008.665955
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 224232 bytes
+lux: 10.000000 [268092][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.670000 humidity: 29.324219 pressure: 1008.626709
+ Digital Value: 0Analog Value: 429Beep beep booop.
+WS-Connections: 1Free heap: 223980 bytes
+lux: 9.166666 [269234][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.670000 humidity: 29.324219 pressure: 1008.649780
+ Digital Value: 0Analog Value: 754Beep beep booop.
+WS-Connections: 1Free heap: 223728 bytes
+lux: 9.166666 [270376][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.660000 humidity: 29.300781 pressure: 1008.667786
+ Digital Value: 0Analog Value: 713Beep beep booop.
+WS-Connections: 1Free heap: 223476 bytes
+lux: 9.166666 [271518][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.650000 humidity: 29.334961 pressure: 1008.620056
+ Digital Value: 0Analog Value: 507Beep beep booop.
+WS-Connections: 1Free heap: 223224 bytes
+lux: 9.166666 [272660][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.639999 humidity: 29.358398 pressure: 1008.643188
+ Digital Value: 0Analog Value: 299Beep beep booop.
+WS-Connections: 1Free heap: 222972 bytes
+lux: 10.000000 [273802][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.639999 humidity: 29.357422 pressure: 1008.638123
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 222724 bytes
+lux: 9.166666 [274944][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.629999 humidity: 29.344727 pressure: 1008.640808
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 222476 bytes
+lux: 9.166666 [276086][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.620001 humidity: 29.309570 pressure: 1008.635681
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 222228 bytes
+lux: 9.166666 [277228][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.620001 humidity: 29.309570 pressure: 1008.647705
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 221980 bytes
+lux: 9.166666 [278370][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.610001 humidity: 29.356445 pressure: 1008.648621
+ Digital Value: 0Analog Value: 0Beep beep booop.
+WS-Connections: 1Free heap: 221732 bytes
+lux: 9.166666 [279513][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.610001 humidity: 29.379883 pressure: 1008.667358
+ Digital Value: 0Analog Value: 403Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [280655][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.610001 humidity: 29.390625 pressure: 1008.685303
+ Digital Value: 0Analog Value: 755ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [281797][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.610001 humidity: 29.332031 pressure: 1008.669983
+ Digital Value: 0Analog Value: 688ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [282939][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.610001 humidity: 29.273438 pressure: 1008.675171
+ Digital Value: 0Analog Value: 400ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [284082][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.610001 humidity: 29.250000 pressure: 1008.642639
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [285224][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.610001 humidity: 29.250000 pressure: 1008.653748
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [286366][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.610001 humidity: 29.261719 pressure: 1008.672485
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [287508][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.610001 humidity: 29.273438 pressure: 1008.663147
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [288651][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.610001 humidity: 29.320312 pressure: 1008.666565
+ Digital Value: 0Analog Value: 341ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [289794][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.600000 humidity: 29.355469 pressure: 1008.691406
+ Digital Value: 0Analog Value: 730ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [290937][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.590000 humidity: 29.366211 pressure: 1008.627502
+ Digital Value: 0Analog Value: 433ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [292079][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.590000 humidity: 29.389648 pressure: 1008.663330
+ Digital Value: 0Analog Value: 2ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [293221][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.580000 humidity: 29.413086 pressure: 1008.663452
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [294363][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.580000 humidity: 29.412109 pressure: 1008.667664
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [295505][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.570000 humidity: 29.435547 pressure: 1008.631104
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [296647][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.570000 humidity: 29.447266 pressure: 1008.628601
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [297789][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.570000 humidity: 29.470703 pressure: 1008.631104
+ Digital Value: 0Analog Value: 480ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [298931][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.570000 humidity: 29.482422 pressure: 1008.658447
+ Digital Value: 0Analog Value: 743ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [300073][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.559999 humidity: 29.505859 pressure: 1008.612427
+ Digital Value: 0Analog Value: 636ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [301215][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.559999 humidity: 29.517578 pressure: 1008.621704
+ Digital Value: 0Analog Value: 52ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [302357][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.549999 humidity: 29.541016 pressure: 1008.594543
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [303499][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.549999 humidity: 29.586914 pressure: 1008.647522
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [304641][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.549999 humidity: 29.599609 pressure: 1008.602173
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [305783][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.549999 humidity: 29.611328 pressure: 1008.613281
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [306925][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.549999 humidity: 29.623047 pressure: 1008.632996
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [308067][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.549999 humidity: 29.623047 pressure: 1008.639832
+ Digital Value: 0Analog Value: 47ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [309209][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.549999 humidity: 29.623047 pressure: 1008.643188
+ Digital Value: 0Analog Value: 737ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [310351][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.549999 humidity: 29.623047 pressure: 1008.592041
+ Digital Value: 0Analog Value: 633ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [311493][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.549999 humidity: 29.611328 pressure: 1008.602295
+ Digital Value: 0Analog Value: 349ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [312635][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.549999 humidity: 29.599609 pressure: 1008.636414
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
+WS-Connections: 1Free heap: 221480 bytes
+lux: 9.166666 [313777][W][Wire.cpp:301] begin(): Bus already started in Master Mode.
+temperature: 23.540001 humidity: 29.586914 pressure: 1008.618591
+ Digital Value: 0Analog Value: 0ERROR: Too many messages queued
+Beep beep booop.
