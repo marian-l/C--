@@ -8,8 +8,6 @@ function App() {
         <ThemeSwitch />
         <h1 class="text-5xl w-full text-center">IoT-Ambient-Music</h1>
       </div>
-      {/* <SensorDisplay data={data()} />
-      <AudioController /> */}
       <Dashboard />
     </div>
   );
