@@ -119,7 +119,7 @@ void loop() {
 
         notifyClients();
 
-        delay(1000);
+        delay(200);
     } else {
         delay(5000);
     }
